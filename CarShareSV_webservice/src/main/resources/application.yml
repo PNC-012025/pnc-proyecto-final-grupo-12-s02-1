@@ -1,0 +1,24 @@
+spring:
+    application:
+        name: CarShareSV_webservice
+
+    datasource:
+        url: jdbc:postgresql://localhost:5432/carsharesv
+        username: postgres
+        password: 1234
+
+    jpa:
+        database: postgresql
+        show-sql: false
+        hibernate:
+            ddl-auto: update
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        defer-datasource-initialization: true
+
+    sql:
+        init:
+            mode: always
+
+app:
+    jwt-secret: 915c72ae5d1ee9247ff653211d6397f6a8ae1bf9dd441f13ea5a5b83c86da75c
+    jwt-expiration-milliseconds: 86400000

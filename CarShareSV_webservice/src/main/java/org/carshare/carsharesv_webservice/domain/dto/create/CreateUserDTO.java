@@ -39,7 +39,7 @@ public class CreateUserDTO {
     @NotEmpty
     @NotNull
     @NotBlank
-    @Pattern(regexp = "^\\d{8}$\n", message = "Phone number must be valid")
+    @Pattern(regexp = "^\\d{8}$", message = "Phone number must be valid")
     private String phoneNumber;
 
     @NotEmpty

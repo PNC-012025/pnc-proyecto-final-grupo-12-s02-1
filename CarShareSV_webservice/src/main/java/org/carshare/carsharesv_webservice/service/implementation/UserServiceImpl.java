@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.carshare.carsharesv_webservice.domain.dto.create.CreateUserDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.UserResponseDTO;
 import org.carshare.carsharesv_webservice.domain.entity.User;
+import org.carshare.carsharesv_webservice.exception.ExistingUserException;
 import org.carshare.carsharesv_webservice.repository.iUserRepository;
 import org.carshare.carsharesv_webservice.service.iUserService;
 import org.modelmapper.ModelMapper;
@@ -19,8 +20,18 @@ public class UserServiceImpl implements iUserService {
     public UserResponseDTO register(CreateUserDTO userDTO) {
         User existingUser = userRepository.findByUsernameOrEmail(userDTO.getUsername(), userDTO.getEmail()).orElse(null);
 
-        if(existingUser != null) throw new IllegalArgumentException("User already exists");
+        if(existingUser != null) throw new ExistingUserException("User already exists");
 
-        return modelMapper.map(userRepository.save(modelMapper.map(userDTO, org.carshare.carsharesv_webservice.domain.entity.User.class)), UserResponseDTO.class);
+        User newUser = new User();
+        newUser.setFirstName(userDTO.getFirstName());
+        newUser.setLastName(userDTO.getLastName());
+        newUser.setUsername(userDTO.getUsername());
+        newUser.setBirthdate(userDTO.getBirthdate());
+        newUser.setPhoneNumber(userDTO.getPhoneNumber());
+        newUser.setEmail(userDTO.getEmail());
+
+        userRepository.save(newUser);
+
+        return modelMapper.map(newUser, UserResponseDTO.class);
     }
 }

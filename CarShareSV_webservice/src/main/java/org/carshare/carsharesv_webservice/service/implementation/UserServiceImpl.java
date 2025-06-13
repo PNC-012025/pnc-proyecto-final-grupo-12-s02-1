@@ -70,6 +70,28 @@ public class UserServiceImpl implements iUserService {
         return users;
     }
 
+    // get all users, active
+    @Override
+    public List<UserResponseDTO> getAllActiveUsers() {
+        List<UserResponseDTO> users = userRepository.findByActive(true).stream().map(user -> modelMapper.map(user, UserResponseDTO.class)).toList();
+
+        // check if users is empty
+        if(users.isEmpty()) throw new ResourceNotFoundException("No users found");
+
+        return users;
+    }
+
+    // get all users, not active
+    @Override
+    public List<UserResponseDTO> getAllNotActiveUsers() {
+        List<UserResponseDTO> users = userRepository.findByActive(false).stream().map(user -> modelMapper.map(user, UserResponseDTO.class)).toList();
+
+        // check if users is empty
+        if(users.isEmpty()) throw new ResourceNotFoundException("No users found");
+
+        return users;
+    }
+
     // only active user
     @Override
     public UserResponseDTO getUserById(UUID userId) {

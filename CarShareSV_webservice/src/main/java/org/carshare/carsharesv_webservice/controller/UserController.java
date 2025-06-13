@@ -19,10 +19,28 @@ public class UserController {
 
     private final iUserService userService;
 
+    //ADMIN ENDPOINT
     @GetMapping(GET_ALL)
     public ResponseEntity<GenericResponse> getAllUsers() {
         return GenericResponse.builder()
                 .data(userService.getAllUsers())
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
+
+    @GetMapping(GET_ALL_ACTIVE)
+    public ResponseEntity<GenericResponse> getAllActiveUsers() {
+        return GenericResponse.builder()
+                .data(userService.getAllActiveUsers())
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
+
+    //ADMIN ENDPOINT
+    @GetMapping(GET_ALL_NOT_ACTIVE)
+    public ResponseEntity<GenericResponse> getAllNotActiveUsers() {
+        return GenericResponse.builder()
+                .data(userService.getAllNotActiveUsers())
                 .status(HttpStatus.OK)
                 .build().buildResponse();
     }

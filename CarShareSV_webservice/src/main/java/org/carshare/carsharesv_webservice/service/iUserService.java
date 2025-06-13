@@ -10,6 +10,9 @@ import java.util.UUID;
 public interface iUserService {
     UserResponseDTO register(CreateUserDTO userDTO) throws Exception;
     List<UserResponseDTO> getAllUsers();
+    List<UserResponseDTO> getAllActiveUsers();
+    List<UserResponseDTO> getAllNotActiveUsers();
+
     UserResponseDTO getUserById(UUID userId);
     UserResponseDTO getUserByUsernameOrEmail(String identifier);
 }

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.carshare.carsharesv_webservice.Util.Status;
+import org.carshare.carsharesv_webservice.util.Status;
 
 import java.time.LocalDate;
 import java.util.UUID;

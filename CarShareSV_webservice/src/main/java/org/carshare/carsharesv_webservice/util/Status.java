@@ -1,4 +1,4 @@
-package org.carshare.carsharesv_webservice.Util;
+package org.carshare.carsharesv_webservice.util;
 
 public enum Status {
     ACTIVE, FINISHED, CANCELED

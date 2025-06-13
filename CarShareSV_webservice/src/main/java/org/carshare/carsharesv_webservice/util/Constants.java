@@ -8,6 +8,7 @@ public final class Constants {
     public static final String API = "/api";
 
     public static final String AUTH_CONTROLLER = "/auth";
+    public static final String USER_CONTROLLER = "/user";
 
     //Common methods
     public static final String CREATE = "/create";
@@ -18,6 +19,7 @@ public final class Constants {
 
     //Other methods
     public static final String REGISTER = "/register";
+    public static final String GET_BY_USERNAME_OR_EMAIL = "/getByUsernameOrEmail";
 
     //Roles
     public static final String USER = "ROLE_USER";

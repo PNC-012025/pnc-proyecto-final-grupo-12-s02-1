@@ -41,6 +41,9 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    @Column
+    private Boolean active;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "userxrole",
             joinColumns = @JoinColumn(name = "user_id"),

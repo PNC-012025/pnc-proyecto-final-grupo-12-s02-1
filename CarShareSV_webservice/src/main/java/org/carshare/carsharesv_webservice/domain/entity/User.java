@@ -26,7 +26,7 @@ public class User {
     @Column
     private String lastName;
 
-    @Column
+    @Column(unique = true)
     private String username;
 
     @Column
@@ -38,7 +38,7 @@ public class User {
     @Column
     private String phoneNumber;
 
-    @Column
+    @Column(unique = true)
     private String email;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE})

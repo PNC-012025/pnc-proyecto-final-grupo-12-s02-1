@@ -1,5 +1,6 @@
 package org.carshare.carsharesv_webservice.repository;
 
+import org.carshare.carsharesv_webservice.domain.entity.Role;
 import org.carshare.carsharesv_webservice.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

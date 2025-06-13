@@ -2,6 +2,7 @@ package org.carshare.carsharesv_webservice.service.implementation;
 
 import lombok.RequiredArgsConstructor;
 import org.carshare.carsharesv_webservice.domain.dto.create.CreateUserDTO;
+import org.carshare.carsharesv_webservice.domain.dto.response.RoleResponseDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.UserResponseDTO;
 import org.carshare.carsharesv_webservice.domain.entity.Role;
 import org.carshare.carsharesv_webservice.domain.entity.User;
@@ -113,4 +114,23 @@ public class UserServiceImpl implements iUserService {
 
         return modelMapper.map(user, UserResponseDTO.class);
     }
+
+    @Override
+    public List<RoleResponseDTO> getAllUserRoles(UUID userId) {
+        User user = userRepository.findOneByUserId(userId);
+
+        if(user == null) throw new ResourceNotFoundException("User not found");
+
+        return user.getRoles().stream().map(role -> modelMapper.map(role, RoleResponseDTO.class)).toList();
+    }
+
+    /*@Override
+    public void deactivateUser(UUID userId) {
+        User user = userRepository.findOneByUserId(userId);
+
+        if(user == null) throw new ResourceNotFoundException("User not found");
+        if(!user.getActive()) throw new NotActiveUserException("User is not active already");
+
+
+    }*/
 }

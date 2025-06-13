@@ -22,6 +22,7 @@ public final class Constants {
     public static final String GET_ALL_ACTIVE = "/getAllActive";
     public static final String GET_ALL_NOT_ACTIVE = "/getAllNotActive";
     public static final String GET_BY_USERNAME_OR_EMAIL = "/getByUsernameOrEmail";
+    public static final String GET_USER_ROLES = "/getUserRoles";
 
     //Roles
     public static final String USER = "ROLE_USER";

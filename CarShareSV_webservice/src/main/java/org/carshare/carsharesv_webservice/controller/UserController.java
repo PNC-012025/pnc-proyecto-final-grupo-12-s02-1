@@ -60,4 +60,12 @@ public class UserController {
                 .status(HttpStatus.OK)
                 .build().buildResponse();
     }
+
+    @GetMapping(GET_USER_ROLES)
+    public ResponseEntity<GenericResponse> getUserRoles(@RequestParam("id") UUID userId) {
+        return GenericResponse.builder()
+                .data(userService.getAllUserRoles(userId))
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
 }

@@ -6,6 +6,7 @@ import org.carshare.carsharesv_webservice.domain.dto.response.UserResponseDTO;
 import org.carshare.carsharesv_webservice.service.iUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -21,6 +22,7 @@ public class UserController {
 
     //ADMIN ENDPOINT
     @GetMapping(GET_ALL)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GenericResponse> getAllUsers() {
         return GenericResponse.builder()
                 .data(userService.getAllUsers())
@@ -29,6 +31,7 @@ public class UserController {
     }
 
     @GetMapping(GET_ALL_ACTIVE)
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> getAllActiveUsers() {
         return GenericResponse.builder()
                 .data(userService.getAllActiveUsers())
@@ -38,6 +41,7 @@ public class UserController {
 
     //ADMIN ENDPOINT
     @GetMapping(GET_ALL_NOT_ACTIVE)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GenericResponse> getAllNotActiveUsers() {
         return GenericResponse.builder()
                 .data(userService.getAllNotActiveUsers())
@@ -46,6 +50,7 @@ public class UserController {
     }
 
     @GetMapping(GET_BY_ID)
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> getUserById(@RequestParam("id") UUID userId) {
         return GenericResponse.builder()
                 .data(userService.getUserById(userId))
@@ -54,6 +59,7 @@ public class UserController {
     }
 
     @GetMapping(GET_BY_USERNAME_OR_EMAIL + "/{identifier}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> getUserByUsernameOrEmail(@PathVariable("identifier") String identifier) {
         return GenericResponse.builder()
                 .data(userService.getUserByUsernameOrEmail(identifier))
@@ -62,6 +68,7 @@ public class UserController {
     }
 
     @GetMapping(GET_USER_ROLES)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GenericResponse> getUserRoles(@RequestParam("id") UUID userId) {
         return GenericResponse.builder()
                 .data(userService.getAllUserRoles(userId))

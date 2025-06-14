@@ -14,6 +14,6 @@ public interface iUserService {
     UserResponseDTO getUserById(UUID userId);
     UserResponseDTO getUserByUsernameOrEmail(String identifier);
     List<RoleResponseDTO> getAllUserRoles(UUID userId);
-    //void deactivateUser(UUID userId);
-    //void activateUser(UUID userId);
+    void deactivateUser(UUID userId);
+    void activateUser(UUID userId);
 }

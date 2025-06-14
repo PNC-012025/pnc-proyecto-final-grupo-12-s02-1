@@ -5,8 +5,10 @@ import org.carshare.carsharesv_webservice.domain.dto.response.RoleResponseDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.UserResponseDTO;
 import org.carshare.carsharesv_webservice.domain.entity.User;
 import org.carshare.carsharesv_webservice.exception.NotActiveUserException;
+import org.carshare.carsharesv_webservice.exception.NotAllowedOperationException;
 import org.carshare.carsharesv_webservice.exception.ResourceNotFoundException;
 import org.carshare.carsharesv_webservice.repository.iUserRepository;
+import org.carshare.carsharesv_webservice.security.JwtProvider;
 import org.carshare.carsharesv_webservice.service.iUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import java.util.UUID;
 public class UserServiceImpl implements iUserService {
     private final iUserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final JwtProvider tokenProvider;
 
     // get all users, active or not active
     @Override
@@ -84,13 +87,43 @@ public class UserServiceImpl implements iUserService {
         return user.getRoles().stream().map(role -> modelMapper.map(role, RoleResponseDTO.class)).toList();
     }
 
-    /*@Override
+    @Override
     public void deactivateUser(UUID userId) {
-        User user = userRepository.findOneByUserId(userId);
+        String token = tokenProvider.getCurrentToken();
+        String username = tokenProvider.getUsernameFromToken(token);
+        List<String> roles = tokenProvider.getRolesFromToken(token);
+        User currentUser = userRepository.findByUsernameOrEmail(username, username).orElse(null);
+        User toDeactivateUser = userRepository.findOneByUserId(userId);
 
-        if(user == null) throw new ResourceNotFoundException("User not found");
-        if(!user.getActive()) throw new NotActiveUserException("User is not active already");
+
+        if(toDeactivateUser == null) throw new ResourceNotFoundException("To deactivate User not found");
+        if(!toDeactivateUser.getActive()) throw new NotActiveUserException("To deactivate User is not active already");
+        if(currentUser == null) throw new ResourceNotFoundException("Current User not found");
 
 
-    }*/
+        if(roles.contains("ADMIN") || currentUser.getUserId().equals(toDeactivateUser.getUserId())) {
+            toDeactivateUser.setActive(false);
+            userRepository.save(toDeactivateUser);
+        } else throw new NotAllowedOperationException("You don't have permissions to deactivate this user. You can only deactivate your own account");
+    }
+
+    @Override
+    public void activateUser(UUID userId) {
+        String token = tokenProvider.getCurrentToken();
+        String username = tokenProvider.getUsernameFromToken(token);
+        List<String> roles = tokenProvider.getRolesFromToken(token);
+        User currentUser = userRepository.findByUsernameOrEmail(username, username).orElse(null);
+        User toActivateUser = userRepository.findOneByUserId(userId);
+
+
+        if(toActivateUser == null) throw new ResourceNotFoundException("To Activate User not found");
+        if(!toActivateUser.getActive()) throw new NotActiveUserException("To Activate User is active already");
+        if(currentUser == null) throw new ResourceNotFoundException("Current User not found");
+
+
+        if(roles.contains("ADMIN") || currentUser.getUserId().equals(toActivateUser.getUserId())) {
+            toActivateUser.setActive(true);
+            userRepository.save(toActivateUser);
+        } else throw new NotAllowedOperationException("You don't have permissions to Activate this user. You can only Activate your own account");
+    }
 }

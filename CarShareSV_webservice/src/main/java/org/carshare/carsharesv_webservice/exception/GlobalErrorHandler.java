@@ -73,4 +73,19 @@ public class GlobalErrorHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .build().buildResponse();
     }
+
+    @ExceptionHandler(NotAllowedOperationException.class)
+    public ResponseEntity<GenericResponse> HandleNotAllowedOperationException(NotAllowedOperationException ex, WebRequest request) {
+
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return GenericResponse.builder()
+                .data(errorResponse)
+                .status(HttpStatus.FORBIDDEN)
+                .build().buildResponse();
+    }
 }

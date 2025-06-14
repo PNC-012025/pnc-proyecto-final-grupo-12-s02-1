@@ -75,4 +75,26 @@ public class UserController {
                 .status(HttpStatus.OK)
                 .build().buildResponse();
     }
+
+    @GetMapping(DEACTIVATE + "/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<GenericResponse> deactivateUserById(@PathVariable("id")  UUID userId) {
+        userService.deactivateUser(userId);
+
+        return GenericResponse.builder()
+                .message("User succesfully deactivated")
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
+
+    @GetMapping(ACTIVATE + "/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<GenericResponse> activateUserById(@PathVariable("id")  UUID userId) {
+        userService.activateUser(userId);
+
+        return GenericResponse.builder()
+                .message("User succesfully activated")
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
 }

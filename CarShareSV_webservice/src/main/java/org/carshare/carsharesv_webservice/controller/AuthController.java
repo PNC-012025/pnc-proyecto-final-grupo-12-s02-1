@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.carshare.carsharesv_webservice.domain.dto.GenericResponse;
 import org.carshare.carsharesv_webservice.domain.dto.create.CreateUserDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.UserResponseDTO;
+import org.carshare.carsharesv_webservice.service.iAuthService;
 import org.carshare.carsharesv_webservice.service.iUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +20,11 @@ import static org.carshare.carsharesv_webservice.util.Constants.*;
 @RestController
 @RequestMapping(API + AUTH_CONTROLLER)
 public class AuthController {
-    private final iUserService userService;
+    private final iAuthService authService;
 
     @PostMapping(REGISTER)
     public ResponseEntity<GenericResponse> register(@RequestBody @Valid CreateUserDTO body) throws Exception {
-        UserResponseDTO data = userService.register(body);
+        UserResponseDTO data = authService.register(body);
 
         return GenericResponse.builder()
                 .message("User succesfully registered")

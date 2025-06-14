@@ -26,39 +26,7 @@ import static org.carshare.carsharesv_webservice.util.Constants.*;
 @RequiredArgsConstructor
 public class UserServiceImpl implements iUserService {
     private final iUserRepository userRepository;
-    private final iRoleRepository roleRepository;
     private final ModelMapper modelMapper;
-
-    @Override
-    public UserResponseDTO register(CreateUserDTO userDTO) throws Exception {
-        User existingUser = userRepository.findByUsernameOrEmail(userDTO.getUsername(), userDTO.getEmail()).orElse(null);
-
-        // check if user exists
-        if(existingUser != null) throw new ExistingUserException("User already exists");
-
-        // create new user
-        User newUser = new User();
-        newUser.setFirstName(userDTO.getFirstName());
-        newUser.setLastName(userDTO.getLastName());
-        newUser.setUsername(userDTO.getUsername());
-        newUser.setBirthdate(userDTO.getBirthdate());
-        newUser.setPhoneNumber(userDTO.getPhoneNumber());
-        newUser.setEmail(userDTO.getEmail());
-        newUser.setActive(true);
-
-        // adding role to user
-        Role userRole = roleRepository.findByRoleName(USER).orElseThrow(() -> new Exception("Role not found"));
-
-        Set<Role> roles = new HashSet<>();
-        roles.add(userRole);
-        newUser.setRoles(roles);
-
-        // save user
-        userRepository.save(newUser);
-
-        // return and map object
-        return modelMapper.map(newUser, UserResponseDTO.class);
-    }
 
     // get all users, active or not active
     @Override

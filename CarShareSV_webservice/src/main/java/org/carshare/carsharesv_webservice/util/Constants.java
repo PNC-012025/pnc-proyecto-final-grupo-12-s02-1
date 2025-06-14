@@ -19,6 +19,7 @@ public final class Constants {
 
     //Other methods
     public static final String REGISTER = "/register";
+    public static final String LOGIN = "/login";
     public static final String GET_ALL_ACTIVE = "/getAllActive";
     public static final String GET_ALL_NOT_ACTIVE = "/getAllNotActive";
     public static final String GET_BY_USERNAME_OR_EMAIL = "/getByUsernameOrEmail";

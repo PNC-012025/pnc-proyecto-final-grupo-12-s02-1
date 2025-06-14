@@ -3,10 +3,11 @@ package org.carshare.carsharesv_webservice.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.carshare.carsharesv_webservice.domain.dto.GenericResponse;
-import org.carshare.carsharesv_webservice.domain.dto.create.CreateUserDTO;
+import org.carshare.carsharesv_webservice.domain.dto.JwtAuthResponse;
+import org.carshare.carsharesv_webservice.domain.dto.request.CreateUserDTO;
+import org.carshare.carsharesv_webservice.domain.dto.request.LoginRequestDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.UserResponseDTO;
 import org.carshare.carsharesv_webservice.service.iAuthService;
-import org.carshare.carsharesv_webservice.service.iUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,5 +32,14 @@ public class AuthController {
                 .data(data)
                 .status(HttpStatus.CREATED)
                 .build().buildResponse();
+    }
+
+    @PostMapping(LOGIN)
+    public ResponseEntity<JwtAuthResponse> login(@RequestBody LoginRequestDTO body) {
+        String token = authService.login(body);
+
+        JwtAuthResponse res = JwtAuthResponse.builder().accessToken(token).build();
+
+        return ResponseEntity.ok(res);
     }
 }

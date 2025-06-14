@@ -24,6 +24,7 @@ public class GlobalErrorHandler {
         log.error(ex.getClass().getCanonicalName());
 
         return GenericResponse.builder()
+                .data(ex.getMessage())
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .build().buildResponse();
     }

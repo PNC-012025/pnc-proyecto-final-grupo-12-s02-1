@@ -1,4 +1,4 @@
-package org.carshare.carsharesv_webservice.domain.dto.create;
+package org.carshare.carsharesv_webservice.domain.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
@@ -27,10 +27,12 @@ public class CreateUserDTO {
     @NotBlank
     private String username;
 
-    /*@NotEmpty
+    @NotEmpty
     @NotNull
     @NotBlank
-    private String password; */ // -> to be implemented
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$",
+            message = "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.")
+    private String password;
 
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "UTC")

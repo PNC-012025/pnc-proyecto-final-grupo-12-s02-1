@@ -1,16 +1,23 @@
 package org.carshare.carsharesv_webservice.service.implementation;
 
 import lombok.RequiredArgsConstructor;
-import org.carshare.carsharesv_webservice.domain.dto.create.CreateUserDTO;
+import org.carshare.carsharesv_webservice.domain.dto.request.CreateUserDTO;
+import org.carshare.carsharesv_webservice.domain.dto.request.LoginRequestDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.UserResponseDTO;
 import org.carshare.carsharesv_webservice.domain.entity.Role;
 import org.carshare.carsharesv_webservice.domain.entity.User;
 import org.carshare.carsharesv_webservice.exception.ExistingUserException;
 import org.carshare.carsharesv_webservice.repository.iRoleRepository;
 import org.carshare.carsharesv_webservice.repository.iUserRepository;
+import org.carshare.carsharesv_webservice.security.JwtProvider;
 import org.carshare.carsharesv_webservice.service.iAuthService;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,6 +27,9 @@ import static org.carshare.carsharesv_webservice.util.Constants.USER;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements iAuthService {
+    private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
+    private final PasswordEncoder passwordEncoder;
     private final iUserRepository userRepository;
     private final iRoleRepository roleRepository;
     private final ModelMapper modelMapper;
@@ -36,6 +46,7 @@ public class AuthServiceImpl implements iAuthService {
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
         newUser.setUsername(userDTO.getUsername());
+        newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         newUser.setBirthdate(userDTO.getBirthdate());
         newUser.setPhoneNumber(userDTO.getPhoneNumber());
         newUser.setEmail(userDTO.getEmail());
@@ -53,5 +64,22 @@ public class AuthServiceImpl implements iAuthService {
 
         // return and map object
         return modelMapper.map(newUser, UserResponseDTO.class);
+    }
+
+    @Override
+    public String login(LoginRequestDTO loginRequestDTO) {
+        // Authenticates the user using the provided username and password
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequestDTO.getUsername(),
+                        loginRequestDTO.getPassword()
+                )
+        );
+
+        // Sets the authentication in Spring Security's context
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Generates a JWT token for the authenticated user
+        return jwtProvider.generateToken(authentication);
     }
 }

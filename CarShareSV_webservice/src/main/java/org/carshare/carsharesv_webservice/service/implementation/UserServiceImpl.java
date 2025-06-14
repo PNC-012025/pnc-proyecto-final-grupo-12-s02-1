@@ -1,26 +1,18 @@
 package org.carshare.carsharesv_webservice.service.implementation;
 
 import lombok.RequiredArgsConstructor;
-import org.carshare.carsharesv_webservice.domain.dto.create.CreateUserDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.RoleResponseDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.UserResponseDTO;
-import org.carshare.carsharesv_webservice.domain.entity.Role;
 import org.carshare.carsharesv_webservice.domain.entity.User;
-import org.carshare.carsharesv_webservice.exception.ExistingUserException;
 import org.carshare.carsharesv_webservice.exception.NotActiveUserException;
 import org.carshare.carsharesv_webservice.exception.ResourceNotFoundException;
-import org.carshare.carsharesv_webservice.repository.iRoleRepository;
 import org.carshare.carsharesv_webservice.repository.iUserRepository;
 import org.carshare.carsharesv_webservice.service.iUserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
-
-import static org.carshare.carsharesv_webservice.util.Constants.*;
 
 @Service
 @RequiredArgsConstructor

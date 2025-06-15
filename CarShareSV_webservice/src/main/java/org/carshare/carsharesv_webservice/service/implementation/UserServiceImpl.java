@@ -2,23 +2,33 @@ package org.carshare.carsharesv_webservice.service.implementation;
 
 import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
+import org.carshare.carsharesv_webservice.domain.dto.GenericResponse;
 import org.carshare.carsharesv_webservice.domain.dto.response.RoleResponseDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.UserResponseDTO;
+import org.carshare.carsharesv_webservice.domain.entity.Role;
 import org.carshare.carsharesv_webservice.domain.entity.User;
 import org.carshare.carsharesv_webservice.exception.*;
+import org.carshare.carsharesv_webservice.repository.iRoleRepository;
 import org.carshare.carsharesv_webservice.repository.iUserRepository;
 import org.carshare.carsharesv_webservice.security.JwtProvider;
 import org.carshare.carsharesv_webservice.service.iUserService;
+import org.carshare.carsharesv_webservice.util.Constants;
 import org.carshare.carsharesv_webservice.util.CurrentUserInfo;
 import org.carshare.carsharesv_webservice.util.UsefullMethods;
 import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
@@ -27,6 +37,7 @@ import java.util.function.BiConsumer;
 @Validated
 public class UserServiceImpl implements iUserService {
     private final iUserRepository userRepository;
+    private final iRoleRepository roleRepository;
     private final ModelMapper modelMapper;
     private final UsefullMethods usefullMethods;
 
@@ -103,7 +114,7 @@ public class UserServiceImpl implements iUserService {
         if(userInfo.currentUser() == null) throw new ResourceNotFoundException("Current User not found");
 
 
-        if(userInfo.roles().contains("ADMIN") || userInfo.currentUser().getUserId().equals(userInfo.requestedUser().getUserId())) {
+        if(userInfo.roles().contains(Constants.SYSADMIN) || userInfo.roles().contains(Constants.ADMIN) || userInfo.currentUser().getUserId().equals(userInfo.requestedUser().getUserId())) {
             userInfo.requestedUser().setActive(false);
             userRepository.save(userInfo.requestedUser());
         } else throw new NotAllowedOperationException("You don't have permissions to deactivate this user. You can only deactivate your own account");
@@ -117,7 +128,7 @@ public class UserServiceImpl implements iUserService {
         if(userInfo.requestedUser().getActive() == true) throw new NotActiveUserException("To Activate User is active already");
         if(userInfo.currentUser() == null) throw new ResourceNotFoundException("Current User not found");
 
-        if(userInfo.roles().contains("ADMIN") || userInfo.currentUser().getUserId().equals(userInfo.requestedUser().getUserId())) {
+        if(userInfo.roles().contains(Constants.SYSADMIN) || userInfo.roles().contains(Constants.ADMIN) || userInfo.currentUser().getUserId().equals(userInfo.requestedUser().getUserId())) {
             userInfo.requestedUser().setActive(true);
             userRepository.save(userInfo.requestedUser());
         } else throw new NotAllowedOperationException("You don't have permissions to Activate this user. You can only Activate your own account");
@@ -130,7 +141,7 @@ public class UserServiceImpl implements iUserService {
         if(userInfo.requestedUser() == null) throw new ResourceNotFoundException("To Update User not found");
         if(userInfo.currentUser() == null) throw new ResourceNotFoundException("Current User not found");
 
-        if(userInfo.roles().contains("ADMIN") || userInfo.currentUser().getUserId().equals(userInfo.requestedUser().getUserId())) {
+        if(userInfo.roles().contains(Constants.SYSADMIN) || userInfo.roles().contains(Constants.ADMIN) || userInfo.currentUser().getUserId().equals(userInfo.requestedUser().getUserId())) {
             updateFunction.accept(userInfo.requestedUser(), newValue);
             userRepository.save(userInfo.requestedUser());
         } else throw new NotAllowedOperationException("You don't have permissions to update this user. You can only update your own account");
@@ -156,7 +167,7 @@ public class UserServiceImpl implements iUserService {
         if(userInfo.requestedUser() == null) throw new ResourceNotFoundException("To Update User not found");
         if(userInfo.currentUser() == null) throw new ResourceNotFoundException("Current User not found");
 
-        if(userInfo.roles().contains("ADMIN") || userInfo.currentUser().getUserId().equals(userInfo.requestedUser().getUserId())) {
+        if(userInfo.roles().contains(Constants.SYSADMIN) || userInfo.roles().contains(Constants.ADMIN) || userInfo.currentUser().getUserId().equals(userInfo.requestedUser().getUserId())) {
             // Verify if the username is already in use
             if (userRepository.findByUsernameOrEmail(username, username).isPresent()) throw new UsernameAlreadyExistsException("Username already taken");
 
@@ -193,5 +204,42 @@ public class UserServiceImpl implements iUserService {
     @Override
     public UserResponseDTO updateUserPhoneNumber(UUID userId, String phoneNumber) {
         return updateUserField(userId, phoneNumber, User::setPhoneNumber);
+    }
+
+    public void grantAdminRoleToUser(UUID userId) {
+        CurrentUserInfo userInfo = usefullMethods.getUserInfo(userId);
+        User toGrantRoleUser = userInfo.requestedUser();
+
+        if(toGrantRoleUser == null) throw new ResourceNotFoundException("To Grant Role User not found");
+        if(userInfo.currentUser() == null) throw new ResourceNotFoundException("Current User not found");
+
+        if(userInfo.roles().contains(Constants.SYSADMIN)) {
+            Set<Role> currentRoles = toGrantRoleUser.getRoles();
+
+            if (currentRoles.stream().anyMatch(role -> role.getRoleName().equals(Constants.ADMIN))) throw new RoleAlreadyAssignedException("ADMIN role is already assigned to " + toGrantRoleUser.getUsername());
+
+            roleRepository.addRoleToUser(toGrantRoleUser.getUserId(), 2);
+
+            userRepository.save(toGrantRoleUser);
+        } else throw new NotAllowedOperationException("You don't have permissions to update this user. You can only update your own account");
+    }
+
+    public void revokeAdminRoleFromUser(UUID userId) {
+        CurrentUserInfo userInfo = usefullMethods.getUserInfo(userId);
+        User toRevokeRoleUser = userInfo.requestedUser();
+
+        if(toRevokeRoleUser == null) throw new ResourceNotFoundException("To Grant Role User not found");
+        if(userInfo.currentUser() == null) throw new ResourceNotFoundException("Current User not found");
+
+
+        if(userInfo.roles().contains(Constants.SYSADMIN)) {
+            Set<Role> currentRoles = toRevokeRoleUser.getRoles();
+
+            if (currentRoles.stream().anyMatch(role -> role.getRoleName().equals(Constants.ADMIN))) {
+                roleRepository.revokeRoleFromUser(toRevokeRoleUser.getUserId(), 2);
+
+                userRepository.save(toRevokeRoleUser);
+            } else throw new RoleNotAssignedException("ADMIN role is not assigned to " + toRevokeRoleUser.getUsername());
+        } else throw new NotAllowedOperationException("You don't have permissions to update this user. You can only update your own account");
     }
 }

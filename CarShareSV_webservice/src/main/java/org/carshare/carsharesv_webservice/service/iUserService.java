@@ -23,4 +23,6 @@ public interface iUserService {
     UserResponseDTO updateUserUsername(UUID userId, @NotEmpty @NotNull @NotBlank @Length(min = 3, max = 12, message = "Username must be min 3 and max 12 characters long") String username);
     UserResponseDTO updateUserEmail(UUID userId, @NotEmpty @NotNull @NotBlank @Email(message = "Email must be valid") String email);
     UserResponseDTO updateUserPhoneNumber(UUID userId, @NotEmpty @NotNull @NotBlank @Pattern(regexp = "^\\d{8}$", message = "Phone number must be valid") String phoneNumber);
+    void grantAdminRoleToUser(UUID userId);
+    void revokeAdminRoleFromUser(UUID userId);
 }

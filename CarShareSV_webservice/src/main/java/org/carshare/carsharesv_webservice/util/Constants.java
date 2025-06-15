@@ -31,7 +31,8 @@ public final class Constants {
     public static final String UPDATE_USERNAME = "/updateUsername";
     public static final String UPDATE_EMAIL = "/updateEmail";
     public static final String UPDATE_PHONENUMBER = "/updatePhoneNumber";
-
+    public static final String GRANT_ADMIN_ROLE = "/grantAdminRole";
+    public static final String REVOKE_ADMIN_ROLE = "/revokeAdminRole";
 
     //Roles
     public static final String USER = "ROLE_USER";

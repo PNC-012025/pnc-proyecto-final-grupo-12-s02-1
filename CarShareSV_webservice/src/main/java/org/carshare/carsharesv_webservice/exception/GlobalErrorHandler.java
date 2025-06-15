@@ -149,4 +149,34 @@ public class GlobalErrorHandler {
                 .status(HttpStatus.UNAUTHORIZED)
                 .build().buildResponse();
     }
+
+    @ExceptionHandler(RoleAlreadyAssignedException.class)
+    public ResponseEntity<GenericResponse> HandleRoleAlreadyAssignedException(RoleAlreadyAssignedException ex, WebRequest request) {
+
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return GenericResponse.builder()
+                .data(errorResponse)
+                .status(HttpStatus.CONFLICT)
+                .build().buildResponse();
+    }
+
+    @ExceptionHandler(RoleNotAssignedException.class)
+    public ResponseEntity<GenericResponse> HandleRoleNotAssignedException(RoleNotAssignedException ex, WebRequest request) {
+
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return GenericResponse.builder()
+                .data(errorResponse)
+                .status(HttpStatus.CONFLICT)
+                .build().buildResponse();
+    }
 }

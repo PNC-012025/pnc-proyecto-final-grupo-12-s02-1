@@ -1,5 +1,6 @@
 package org.carshare.carsharesv_webservice.controller;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.carshare.carsharesv_webservice.domain.dto.GenericResponse;
 import org.carshare.carsharesv_webservice.domain.dto.response.UserResponseDTO;
@@ -22,7 +23,7 @@ public class UserController {
 
     //ADMIN ENDPOINT
     @GetMapping(GET_ALL)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN')")
     public ResponseEntity<GenericResponse> getAllUsers() {
         return GenericResponse.builder()
                 .data(userService.getAllUsers())
@@ -31,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping(GET_ALL_ACTIVE)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> getAllActiveUsers() {
         return GenericResponse.builder()
                 .data(userService.getAllActiveUsers())
@@ -41,7 +42,7 @@ public class UserController {
 
     //ADMIN ENDPOINT
     @GetMapping(GET_ALL_NOT_ACTIVE)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN')")
     public ResponseEntity<GenericResponse> getAllNotActiveUsers() {
         return GenericResponse.builder()
                 .data(userService.getAllNotActiveUsers())
@@ -50,7 +51,7 @@ public class UserController {
     }
 
     @GetMapping(GET_BY_ID)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> getUserById(@RequestParam("id") UUID userId) {
         return GenericResponse.builder()
                 .data(userService.getUserById(userId))
@@ -59,7 +60,7 @@ public class UserController {
     }
 
     @GetMapping(GET_BY_USERNAME_OR_EMAIL + "/{identifier}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> getUserByUsernameOrEmail(@PathVariable("identifier") String identifier) {
         return GenericResponse.builder()
                 .data(userService.getUserByUsernameOrEmail(identifier))
@@ -68,7 +69,7 @@ public class UserController {
     }
 
     @GetMapping(GET_USER_ROLES)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN')")
     public ResponseEntity<GenericResponse> getUserRoles(@RequestParam("id") UUID userId) {
         return GenericResponse.builder()
                 .data(userService.getAllUserRoles(userId))
@@ -77,7 +78,7 @@ public class UserController {
     }
 
     @PatchMapping(DEACTIVATE + "/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> deactivateUserById(@PathVariable("id")  UUID userId) {
         userService.deactivateUser(userId);
 
@@ -88,7 +89,7 @@ public class UserController {
     }
 
     @PatchMapping(ACTIVATE + "/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> activateUserById(@PathVariable("id")  UUID userId) {
         userService.activateUser(userId);
 
@@ -99,7 +100,7 @@ public class UserController {
     }
 
     @PatchMapping(UPDATE_FIRSTNAME)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> updateUserFirstName(@RequestParam("id") UUID userId, @RequestParam("firstName") String firstName) {
         return GenericResponse.builder()
                 .message("User firstName succesfully updated")
@@ -109,7 +110,7 @@ public class UserController {
     }
 
     @PatchMapping(UPDATE_LASTNAME)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> updateUserLastName(@RequestParam("id") UUID userId, @RequestParam("lastName") String lastName) {
         return GenericResponse.builder()
                 .message("User lastName succesfully updated")
@@ -119,7 +120,7 @@ public class UserController {
     }
 
     @PatchMapping(UPDATE_USERNAME)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> updateUserUsername(@RequestParam("id") UUID userId, @RequestParam("username") String username) {
         return GenericResponse.builder()
                 .message("Username succesfully updated")
@@ -129,7 +130,7 @@ public class UserController {
     }
 
     @PatchMapping(UPDATE_EMAIL)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> updateUserEmail(@RequestParam("id") UUID userId, @RequestParam("email") String email) {
         return GenericResponse.builder()
                 .message("User email succesfully updated")
@@ -139,11 +140,35 @@ public class UserController {
     }
 
     @PatchMapping(UPDATE_PHONENUMBER)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> updateUserPhoneNumber(@RequestParam("id") UUID userId, @RequestParam("phoneNumber") String phoneNumber) {
         return GenericResponse.builder()
                 .message("User phoneNumber succesfully updated")
                 .data(userService.updateUserPhoneNumber(userId, phoneNumber))
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
+
+    @PatchMapping(GRANT_ADMIN_ROLE + "/{id}")
+    //@PreAuthorize("hasRole('SYSADMIN')")
+    @Transactional
+    public ResponseEntity<GenericResponse> grantAdminRoleToUser(@PathVariable("id") UUID userId) {
+        userService.grantAdminRoleToUser(userId);
+
+        return GenericResponse.builder()
+                .message("Admin Role Granted to user succesfully")
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
+
+    @PatchMapping(REVOKE_ADMIN_ROLE + "/{id}")
+    //@PreAuthorize("hasRole('SYSADMIN')")
+    @Transactional
+    public ResponseEntity<GenericResponse> revokeAdminRoleFromUser(@PathVariable("id") UUID userId) {
+        userService.revokeAdminRoleFromUser(userId);
+
+        return GenericResponse.builder()
+                .message("Admin Role revoked to user succesfully")
                 .status(HttpStatus.OK)
                 .build().buildResponse();
     }

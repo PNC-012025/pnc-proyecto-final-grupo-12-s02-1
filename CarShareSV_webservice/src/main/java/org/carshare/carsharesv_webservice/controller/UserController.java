@@ -76,7 +76,7 @@ public class UserController {
                 .build().buildResponse();
     }
 
-    @GetMapping(DEACTIVATE + "/{id}")
+    @PatchMapping(DEACTIVATE + "/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> deactivateUserById(@PathVariable("id")  UUID userId) {
         userService.deactivateUser(userId);
@@ -87,13 +87,63 @@ public class UserController {
                 .build().buildResponse();
     }
 
-    @GetMapping(ACTIVATE + "/{id}")
+    @PatchMapping(ACTIVATE + "/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> activateUserById(@PathVariable("id")  UUID userId) {
         userService.activateUser(userId);
 
         return GenericResponse.builder()
                 .message("User succesfully activated")
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
+
+    @PatchMapping(UPDATE_FIRSTNAME)
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<GenericResponse> updateUserFirstName(@RequestParam("id") UUID userId, @RequestParam("firstName") String firstName) {
+        return GenericResponse.builder()
+                .message("User firstName succesfully updated")
+                .data(userService.updateUserFirstName(userId, firstName))
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
+
+    @PatchMapping(UPDATE_LASTNAME)
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<GenericResponse> updateUserLastName(@RequestParam("id") UUID userId, @RequestParam("lastName") String lastName) {
+        return GenericResponse.builder()
+                .message("User lastName succesfully updated")
+                .data(userService.updateUserLastName(userId, lastName))
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
+
+    @PatchMapping(UPDATE_USERNAME)
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<GenericResponse> updateUserUsername(@RequestParam("id") UUID userId, @RequestParam("username") String username) {
+        return GenericResponse.builder()
+                .message("Username succesfully updated")
+                .data(userService.updateUserUsername(userId, username))
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
+
+    @PatchMapping(UPDATE_EMAIL)
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<GenericResponse> updateUserEmail(@RequestParam("id") UUID userId, @RequestParam("email") String email) {
+        return GenericResponse.builder()
+                .message("User email succesfully updated")
+                .data(userService.updateUserEmail(userId, email))
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
+
+    @PatchMapping(UPDATE_PHONENUMBER)
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    public ResponseEntity<GenericResponse> updateUserPhoneNumber(@RequestParam("id") UUID userId, @RequestParam("phoneNumber") String phoneNumber) {
+        return GenericResponse.builder()
+                .message("User phoneNumber succesfully updated")
+                .data(userService.updateUserPhoneNumber(userId, phoneNumber))
                 .status(HttpStatus.OK)
                 .build().buildResponse();
     }

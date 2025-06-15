@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,7 +19,6 @@ import java.util.stream.Collectors;
 public class CustomUserDetailService implements UserDetailsService {
     private iUserRepository userRepository; // Repository to access user data
 
-    @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) {
         // Fetches an employee by username or email, throws an exception if not found
         User user = userRepository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)

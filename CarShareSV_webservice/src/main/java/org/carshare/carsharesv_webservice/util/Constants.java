@@ -26,7 +26,11 @@ public final class Constants {
     public static final String GET_USER_ROLES = "/getUserRoles";
     public static final String ACTIVATE = "/activate";
     public static final String DEACTIVATE = "/deactivate";
-
+    public static final String UPDATE_FIRSTNAME = "/updateFirstName";
+    public static final String UPDATE_LASTNAME = "/updateLastName";
+    public static final String UPDATE_USERNAME = "/updateUsername";
+    public static final String UPDATE_EMAIL = "/updateEmail";
+    public static final String UPDATE_PHONENUMBER = "/updatePhoneNumber";
 
 
     //Roles

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 
 import java.time.LocalDate;
 
@@ -25,6 +26,7 @@ public class CreateUserDTO {
     @NotEmpty
     @NotNull
     @NotBlank
+    @Length(min = 3, max = 12, message = "Username must be min 3 and max 12 characters long")
     private String username;
 
     @NotEmpty

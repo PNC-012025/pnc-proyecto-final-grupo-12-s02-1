@@ -5,6 +5,13 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.carshare.carsharesv_webservice.domain.entity.User;
+import org.carshare.carsharesv_webservice.exception.UsernameNotFoundException;
+import org.carshare.carsharesv_webservice.repository.iUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -20,6 +27,13 @@ import java.util.*;
  */
 @Component
 public class JwtProvider {
+    private final iUserRepository userRepository;
+
+    @Autowired
+    JwtProvider(iUserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Value("${app.jwt-secret}")
     private String secret; // secret key used to sign the JWT
 
@@ -33,14 +47,19 @@ public class JwtProvider {
         Date expirationDate = new Date(now.getTime() + Long.parseLong(expirationTime)); // calculate expiration date
         List<String> roles = auth.getAuthorities().stream().map(item -> item.getAuthority()).toList();
 
+        User user = userRepository.findByUsernameOrEmail(username, username).orElse(null);
+
+        if(user == null) throw new UsernameNotFoundException("User not found");
+
         // set the claims for the JWT, here we can add custom fields to the JWT, ex. roles, email, etc
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", roles);
+        claims.put("username", username);
 
         // Build and sign the JWT
         return Jwts.builder()
                 .claims(claims)
-                .subject(username)
+                .subject(user.getUserId().toString())
                 .issuedAt(now)
                 .expiration(expirationDate)
                 .signWith(getKey())
@@ -61,7 +80,21 @@ public class JwtProvider {
                     .build()
                     .parseSignedClaims(token)
                     .getPayload()
-                    .getSubject();
+                    .get("username").toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public UUID getIdFromToken(String token) {
+        try {
+            return UUID.fromString(Jwts.parser()
+                    .verifyWith((SecretKey) getKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getSubject());
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -93,11 +126,17 @@ public class JwtProvider {
     }
 
     // gets the current user token
-    public String getCurrentToken() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getCredentials() instanceof String) {
-            return (String) authentication.getCredentials();
+    public String getUserToken(HttpServletRequest request) {
+        // Get the value of the "Authorization" header from the HTTP request
+        String bearerToken = request.getHeader("Authorization");
+
+        // Check if the header is not null and starts with "Bearer "
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            // Return the JWT token by removing the "Bearer " prefix
+            return bearerToken.substring(7, bearerToken.length());
         }
+
+        // Return null if a valid token is not found
         return null;
     }
 

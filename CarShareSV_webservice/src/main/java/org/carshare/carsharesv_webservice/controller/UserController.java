@@ -150,7 +150,7 @@ public class UserController {
     }
 
     @PatchMapping(GRANT_ADMIN_ROLE + "/{id}")
-    //@PreAuthorize("hasRole('SYSADMIN')")
+    @PreAuthorize("hasRole('SYSADMIN')")
     @Transactional
     public ResponseEntity<GenericResponse> grantAdminRoleToUser(@PathVariable("id") UUID userId) {
         userService.grantAdminRoleToUser(userId);
@@ -162,7 +162,7 @@ public class UserController {
     }
 
     @PatchMapping(REVOKE_ADMIN_ROLE + "/{id}")
-    //@PreAuthorize("hasRole('SYSADMIN')")
+    @PreAuthorize("hasRole('SYSADMIN')")
     @Transactional
     public ResponseEntity<GenericResponse> revokeAdminRoleFromUser(@PathVariable("id") UUID userId) {
         userService.revokeAdminRoleFromUser(userId);

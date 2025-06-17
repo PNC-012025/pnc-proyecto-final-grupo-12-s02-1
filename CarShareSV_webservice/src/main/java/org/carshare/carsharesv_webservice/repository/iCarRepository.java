@@ -11,7 +11,10 @@ public interface iCarRepository extends JpaRepository<Car, UUID> {
 
     List<Car> findCarsByUserId(UUID userId);
     List<Car> findCarsByYear(Integer yearId);
+    List<Car> findAll();
     Optional<Car> findCarById(UUID carId);
+    Optional<Car> findCarByPlateNumber(String plateNumber);
     List<Car> findCarsByBrand(Integer brandId);
     List<Car> findCarsByModel(Integer modelId);
+
 }

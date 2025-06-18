@@ -60,7 +60,7 @@ public class CarServiceImpl implements iCarService {
 
     @Override
     public List<CarResponseDTO> getAllCarsByModel(Integer modelId) {
-        List<CarResponseDTO> cars = carRepository.findCarsByModel(modelId).stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
+        List<CarResponseDTO> cars = carRepository.findCarsByModelModelId(modelId).stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
 
         if(cars.isEmpty()) throw new ResourceNotFoundException("No Cars found");
 
@@ -69,14 +69,14 @@ public class CarServiceImpl implements iCarService {
 
     @Override
     public List<CarResponseDTO> getAllCarsByBrand(Integer brand) {
-        List<CarResponseDTO> cars = carRepository.findCarsByBrand(brand).stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
+        List<CarResponseDTO> cars = carRepository.findCarsByBrandBrandId(brand).stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
         if(cars.isEmpty()) throw new ResourceNotFoundException("No Cars found");
         return cars;
     }
 
     @Override
-    public List<CarResponseDTO> getAllCarsByYear(Integer year) {
-        List<CarResponseDTO> cars = carRepository.findCarsByYear(year).stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
+    public List<CarResponseDTO> getAllCarsByYear(Integer yearId) {
+        List<CarResponseDTO> cars = carRepository.findCarsByYearId(yearId).stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
 
         if(cars.isEmpty()) throw new ResourceNotFoundException("No Cars found");
         return cars;
@@ -84,14 +84,14 @@ public class CarServiceImpl implements iCarService {
 
     @Override
     public CarResponseDTO getCarById(UUID carId) {
-        Car car = carRepository.findCarById(carId).orElse(null);
+        Car car = carRepository.findCarByCarId(carId).orElse(null);
         if (car == null) throw new ResourceNotFoundException("Car not found");
         return modelMapper.map(car, CarResponseDTO.class);
     }
 
     @Override
     public CarResponseDTO updateCarByDailyPrice(UUID carId, float price) {
-        Car car = carRepository.findCarById(carId).orElse(null);
+        Car car = carRepository.findCarByCarId(carId).orElse(null);
         if (car == null) throw new ResourceNotFoundException("Car not found");
         car.setDailyPrice(price);
 
@@ -100,8 +100,15 @@ public class CarServiceImpl implements iCarService {
 
     @Override
     public void deleteCarById(UUID carId) {
-        Car car = carRepository.findCarById(carId).orElse(null);
+        Car car = carRepository.findCarByCarId(carId).orElse(null);
         if (car == null) throw new ResourceNotFoundException("Car not found");
         carRepository.delete(car);
+    }
+
+    @Override
+    public List<CarResponseDTO> getAllCarsByUserId(UUID userId) {
+        List<Car> cars = carRepository.findCarsByUserUserId(userId);
+        if(cars.isEmpty()) throw new ResourceNotFoundException("No Cars found");
+        return cars.stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
     }
 }

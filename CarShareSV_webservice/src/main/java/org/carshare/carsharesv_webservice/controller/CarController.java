@@ -36,7 +36,7 @@ public class CarController {
                 .build().buildResponse();
     }
 
-    @GetMapping(CREATE)
+    @PostMapping(CREATE)
     @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> saveCar(@RequestBody @Valid CreateCarDTO body) throws Exception {
         CarResponseDTO data = carService.saveCar(body);
@@ -57,7 +57,7 @@ public class CarController {
                 .build().buildResponse();
     }
 
-    @GetMapping(GET_ALL_CARS_BY_MODEL + "/{'modelId'}")
+    @GetMapping(GET_ALL_CARS_BY_MODEL + "/{modelId}")
     @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> getAllCarsByModel(@PathVariable("modelId") Integer modelId) {
         return GenericResponse.builder()
@@ -66,7 +66,7 @@ public class CarController {
                 .build().buildResponse();
     }
 
-    @GetMapping(GET_ALL_CARS_BY_BRAND + "/{'brandId'}")
+    @GetMapping(GET_ALL_CARS_BY_BRAND + "/{brandId}")
     @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> getAllCarsByBrand(@PathVariable("brandId") Integer brandId) {
         return GenericResponse.builder()
@@ -75,7 +75,7 @@ public class CarController {
                 .build().buildResponse();
     }
 
-    @GetMapping(GET_ALL_CARS_BY_YEAR + "/{'year'}")
+    @GetMapping(GET_ALL_CARS_BY_YEAR + "/{year}")
     @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> getAllCarsByYear(@PathVariable("year") Integer year) {
         return GenericResponse.builder()
@@ -93,12 +93,21 @@ public class CarController {
                 .build().buildResponse();
     }
 
-    @GetMapping(UPDATE_DAILY_PRICE)
+    @PatchMapping(UPDATE_DAILY_PRICE)
     @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
     public ResponseEntity<GenericResponse> updateCarByDailyPrice(@RequestParam("id") UUID carId, @NotEmpty @NotNull @NotBlank @Positive float price) {
         return GenericResponse.builder()
                 .message("Daily price updated successfully")
                 .data(carService.updateCarByDailyPrice(carId, price))
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
+
+    @GetMapping(GET_CAR_BY_USER_ID + "/{userId}")
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
+    public ResponseEntity<GenericResponse> getCarByUserId(@PathVariable("userId") UUID userId) {
+        return GenericResponse.builder()
+                .data(carService.getAllCarsByUserId(userId))
                 .status(HttpStatus.OK)
                 .build().buildResponse();
     }

@@ -29,6 +29,7 @@ public final class Constants {
     public static final String GET_ALL_CARS_BY_BRAND = "/getAllCarsByBrand";
     public static final String GET_ALL_CARS_BY_YEAR = "/getAllCarsByYear";
     public static final String GET_CAR_BY_ID = "/getCarById";
+    public static final String GET_CAR_BY_USER_ID = "/getCarByUserId";
     public static final String ACTIVATE = "/activate";
     public static final String DEACTIVATE = "/deactivate";
     public static final String UPDATE_FIRSTNAME = "/updateFirstName";

@@ -17,6 +17,7 @@ public interface iCarService {
     List<CarResponseDTO> getAllCarsByModel(Integer modelId);
     List<CarResponseDTO> getAllCarsByBrand(Integer brand);
     List<CarResponseDTO> getAllCarsByYear(Integer year);
+    List<CarResponseDTO> getAllCarsByUserId(UUID userId);
     CarResponseDTO getCarById(UUID carId);
     CarResponseDTO updateCarByDailyPrice(UUID carId, @NotEmpty @NotNull @NotBlank @Positive float price);
     void deleteCarById(UUID carId);

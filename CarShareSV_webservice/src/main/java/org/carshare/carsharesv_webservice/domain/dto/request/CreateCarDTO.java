@@ -12,23 +12,18 @@ import org.carshare.carsharesv_webservice.domain.entity.Year;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateCarDTO {
-  @NotEmpty
+
   @NotNull
-  @NotBlank
   @Min(2)
   @Max(5)
   private Integer doors;
 
-  @NotEmpty
   @NotNull
-  @NotBlank
   @Min(1)
   @Max(7)
   private Integer capacity;
-
-  @NotEmpty
+  
   @NotNull
-  @NotBlank
   @Positive
   private Float dailyPrice;
 

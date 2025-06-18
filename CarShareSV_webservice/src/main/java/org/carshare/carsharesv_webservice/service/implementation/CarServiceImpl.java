@@ -28,9 +28,9 @@ public class CarServiceImpl implements iCarService {
     private final UsefullMethods usefullMethods;
 
     @Override
-    public CarResponseDTO saveCar(CreateCarDTO carDTO, UUID userId) {
+    public CarResponseDTO saveCar(CreateCarDTO carDTO) {
         Car existingCar = carRepository.findCarByPlateNumber(carDTO.getPlateNumber()).orElse(null);
-        CurrentUserInfo currentUser = usefullMethods.getUserInfo(userId);
+        CurrentUserInfo currentUser = usefullMethods.getUserInfo(null);
 
         if(existingCar != null) throw new ExistingCarException("Car already exists");
 

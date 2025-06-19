@@ -14,6 +14,10 @@ public class Model {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer modelId;
 
-    @Column
+    @Column(unique = true)
     private String model;
+
+    @ManyToOne
+    @JoinColumn(name = "brand_id")
+    private Brand brand;
 }

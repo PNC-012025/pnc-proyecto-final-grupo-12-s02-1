@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.carshare.carsharesv_webservice.domain.entity.Brand;
 import org.carshare.carsharesv_webservice.domain.entity.Model;
 import org.carshare.carsharesv_webservice.domain.entity.Year;
+import org.hibernate.validator.constraints.Length;
 
 @Data
 @NoArgsConstructor
@@ -36,16 +37,21 @@ public class CreateCarDTO {
   @NotEmpty
   @NotNull
   @NotBlank
-  private Year year;
+  @Length(min = 3, max = 100, message = "Description must be min 3 and max 100 characters long")
+  private String description;
+
+  @NotNull
+  @Min(2015)
+  @Max(2025)
+  private Integer year;
 
   @NotEmpty
   @NotNull
   @NotBlank
-  private Model model;
+  private String model;
 
   @NotEmpty
   @NotNull
   @NotBlank
-  private Brand brand;
-
+  private String brand;
 }

@@ -1,5 +1,7 @@
 package org.carshare.carsharesv_webservice.configuration;
 
+import org.carshare.carsharesv_webservice.domain.dto.response.CarResponseDTO;
+import org.carshare.carsharesv_webservice.domain.entity.Car;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +10,13 @@ import org.springframework.context.annotation.Configuration;
 public class MapperConfig {
     @Bean
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
+        modelMapper.typeMap(Car.class, CarResponseDTO.class)
+                .addMapping(src -> src.getModel().getModel(), CarResponseDTO::setModel)
+                .addMapping(src -> src.getBrand().getBrand(), CarResponseDTO::setBrand)
+                .addMapping(src -> src.getYear().getYear(), CarResponseDTO::setYear)
+                .addMapping(src -> src.getUser().getUsername(), CarResponseDTO::setUsername);
+
+        return modelMapper;
     }
 }

@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface iCarService {
 
-    CarResponseDTO saveCar(CreateCarDTO car) throws Exception;
+    CarResponseDTO saveCar(CreateCarDTO car);
     List<CarResponseDTO> getAllCars();
     List<CarResponseDTO> getAllCarsByModel(Integer modelId);
     List<CarResponseDTO> getAllCarsByBrand(Integer brand);

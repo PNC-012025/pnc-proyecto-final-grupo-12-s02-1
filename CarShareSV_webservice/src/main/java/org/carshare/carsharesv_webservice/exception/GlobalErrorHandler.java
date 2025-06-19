@@ -179,4 +179,64 @@ public class GlobalErrorHandler {
                 .status(HttpStatus.CONFLICT)
                 .build().buildResponse();
     }
+
+    @ExceptionHandler(ModelNotFoundException.class)
+    public ResponseEntity<GenericResponse> handleNotModelFoundException(ModelNotFoundException ex, WebRequest request) {
+
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return GenericResponse.builder()
+                .data(errorResponse)
+                .status(HttpStatus.NOT_FOUND)
+                .build().buildResponse();
+    }
+
+    @ExceptionHandler(YearNotFoundException.class)
+    public ResponseEntity<GenericResponse> handleYearNotFoundException(YearNotFoundException ex, WebRequest request) {
+
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return GenericResponse.builder()
+                .data(errorResponse)
+                .status(HttpStatus.NOT_FOUND)
+                .build().buildResponse();
+    }
+
+    @ExceptionHandler(BrandNotFoundException.class)
+    public ResponseEntity<GenericResponse> handleBrandNotFoundException(BrandNotFoundException ex, WebRequest request) {
+
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return GenericResponse.builder()
+                .data(errorResponse)
+                .status(HttpStatus.NOT_FOUND)
+                .build().buildResponse();
+    }
+
+    @ExceptionHandler(NotValidModelForBrandException.class)
+    public ResponseEntity<GenericResponse> handleNotValidModelForBrandException(NotValidModelForBrandException ex, WebRequest request) {
+
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return GenericResponse.builder()
+                .data(errorResponse)
+                .status(HttpStatus.CONFLICT)
+                .build().buildResponse();
+    }
 }

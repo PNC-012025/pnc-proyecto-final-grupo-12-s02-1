@@ -38,9 +38,10 @@ public class CarController {
 
     @PostMapping(CREATE)
     @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
-    public ResponseEntity<GenericResponse> saveCar(@RequestBody @Valid CreateCarDTO body) throws Exception {
+    public ResponseEntity<GenericResponse> saveCar(@RequestBody @Valid CreateCarDTO body) {
         CarResponseDTO data = carService.saveCar(body);
         return GenericResponse.builder()
+                .message("Car saved Successfully")
                 .data(data)
                 .status(HttpStatus.OK)
                 .build().buildResponse();

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,6 +16,9 @@ public class Brand {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer brandId;
 
-    @Column
+    @Column(unique = true)
     private String brand;
+
+    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL)
+    private List<Model> models;
 }

@@ -14,6 +14,6 @@ public class Year {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer yearId;
 
-    @Column
+    @Column(unique = true)
     private Integer year;
 }

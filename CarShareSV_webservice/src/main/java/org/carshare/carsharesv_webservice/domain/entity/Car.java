@@ -28,6 +28,12 @@ public class Car {
     @Column
     private String plateNumber;
 
+    @Column
+    private String description;
+
+    @Column
+    private Boolean visible;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_car_user"))
     private User user;

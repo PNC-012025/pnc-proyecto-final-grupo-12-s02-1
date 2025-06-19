@@ -12,15 +12,11 @@ import java.util.UUID;
 public interface iCarRepository extends JpaRepository<Car, UUID> {
 
     List<Car> findCarsByUserUserId(UUID userId);
-    List<Car> findAll();
+    List<Car> findAllCarsByVisible(Boolean visible);
     Optional<Car> findCarByCarId(UUID carId);
     Optional<Car> findCarByPlateNumber(String plateNumber);
-    List<Car> findCarsByBrandBrandId(Integer brandId);
-    List<Car> findCarsByModelModelId(Integer modelId);
-
-    @Modifying
-    @Query(value = "SELECT * FROM car WHERE year_id =: yearId",
-            nativeQuery = true)
-    List<Car> findCarsByYearId(Integer yearId);
+    List<Car> findCarsByBrandBrandIdAndVisible(Integer brandId, Boolean visible);
+    List<Car> findCarsByModelModelIdAndVisible(Integer modelId, Boolean visible);
+    List<Car> findCarsByYearYearIdAndVisible(Integer yearId, Boolean visible);
 
 }

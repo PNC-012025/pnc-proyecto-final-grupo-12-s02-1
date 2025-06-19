@@ -3,6 +3,7 @@ package org.carshare.carsharesv_webservice.service.implementation;
 
 import lombok.RequiredArgsConstructor;
 import org.carshare.carsharesv_webservice.domain.dto.request.CreateCarDTO;
+import org.carshare.carsharesv_webservice.domain.dto.request.UpdateCarDescriptionDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.CarResponseDTO;
 import org.carshare.carsharesv_webservice.domain.entity.Brand;
 import org.carshare.carsharesv_webservice.domain.entity.Car;
@@ -14,6 +15,7 @@ import org.carshare.carsharesv_webservice.repository.iCarRepository;
 import org.carshare.carsharesv_webservice.repository.iModelRepository;
 import org.carshare.carsharesv_webservice.repository.iYearRepository;
 import org.carshare.carsharesv_webservice.service.iCarService;
+import org.carshare.carsharesv_webservice.util.Constants;
 import org.carshare.carsharesv_webservice.util.CurrentUserInfo;
 import org.carshare.carsharesv_webservice.util.UsefullMethods;
 import org.modelmapper.ModelMapper;
@@ -22,6 +24,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -58,6 +61,7 @@ public class CarServiceImpl implements iCarService {
         newCar.setPlateNumber(carDTO.getPlateNumber());
         newCar.setDescription(carDTO.getDescription());
         newCar.setModel(model);
+        newCar.setCapacity(carDTO.getCapacity());
         newCar.setYear(year);
         newCar.setDoors(carDTO.getDoors());
         newCar.setBrand(brand);
@@ -73,7 +77,17 @@ public class CarServiceImpl implements iCarService {
 
     @Override
     public List<CarResponseDTO> getAllCars() {
-        List<CarResponseDTO> cars = carRepository.findAll().stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
+        List<Car> cars = carRepository.findAll();
+
+        if(cars.isEmpty()) throw new ResourceNotFoundException("No Cars found");
+
+        return cars.stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
+
+    }
+
+    @Override
+    public List<CarResponseDTO> getAllVisibleCars() {
+        List<CarResponseDTO> cars = carRepository.findAllCarsByVisible(true).stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
 
         if(cars.isEmpty()) throw new ResourceNotFoundException("No Cars found");
 
@@ -82,7 +96,7 @@ public class CarServiceImpl implements iCarService {
 
     @Override
     public List<CarResponseDTO> getAllCarsByModel(Integer modelId) {
-        List<CarResponseDTO> cars = carRepository.findCarsByModelModelId(modelId).stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
+        List<CarResponseDTO> cars = carRepository.findCarsByModelModelIdAndVisible(modelId, true).stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
 
         if(cars.isEmpty()) throw new ResourceNotFoundException("No Cars found");
 
@@ -91,14 +105,14 @@ public class CarServiceImpl implements iCarService {
 
     @Override
     public List<CarResponseDTO> getAllCarsByBrand(Integer brand) {
-        List<CarResponseDTO> cars = carRepository.findCarsByBrandBrandId(brand).stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
+        List<CarResponseDTO> cars = carRepository.findCarsByBrandBrandIdAndVisible(brand, true).stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
         if(cars.isEmpty()) throw new ResourceNotFoundException("No Cars found");
         return cars;
     }
 
     @Override
     public List<CarResponseDTO> getAllCarsByYear(Integer yearId) {
-        List<CarResponseDTO> cars = carRepository.findCarsByYearId(yearId).stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
+        List<CarResponseDTO> cars = carRepository.findCarsByYearYearIdAndVisible(yearId, true).stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
 
         if(cars.isEmpty()) throw new ResourceNotFoundException("No Cars found");
         return cars;
@@ -114,8 +128,25 @@ public class CarServiceImpl implements iCarService {
     @Override
     public CarResponseDTO updateCarByDailyPrice(UUID carId, float price) {
         Car car = carRepository.findCarByCarId(carId).orElse(null);
+        CurrentUserInfo userInfo = usefullMethods.getUserInfo(null);
         if (car == null) throw new ResourceNotFoundException("Car not found");
-        car.setDailyPrice(price);
+        if(userInfo.roles().contains(Constants.SYSADMIN) || userInfo.roles().contains(Constants.ADMIN) || car.getUser().getUserId().equals(userInfo.currentUser().getUserId())) {
+            car.setDailyPrice(price);
+            carRepository.save(car);
+        }else throw new NotAllowedOperationException("You don't have permissions to update this car. You can only update your own car");
+
+        return modelMapper.map(car, CarResponseDTO.class);
+    }
+
+    @Override
+    public CarResponseDTO updateCarByDescription(UUID carId, UpdateCarDescriptionDTO updateCarDescriptionDTO) {
+        Car car = carRepository.findCarByCarId(carId).orElse(null);
+        CurrentUserInfo userInfo = usefullMethods.getUserInfo(null);
+        if (car == null) throw new ResourceNotFoundException("Car not found");
+        if(userInfo.roles().contains(Constants.SYSADMIN) || userInfo.roles().contains(Constants.ADMIN) || car.getUser().getUserId().equals(userInfo.currentUser().getUserId())) {
+            car.setDescription(updateCarDescriptionDTO.getDescription());
+            carRepository.save(car);
+        }else throw new NotAllowedOperationException("You don't have permissions to update this car. You can only update your own car");
 
         return modelMapper.map(car, CarResponseDTO.class);
     }
@@ -123,8 +154,14 @@ public class CarServiceImpl implements iCarService {
     @Override
     public void deleteCarById(UUID carId) {
         Car car = carRepository.findCarByCarId(carId).orElse(null);
+        CurrentUserInfo userInfo = usefullMethods.getUserInfo(null);
+
         if (car == null) throw new ResourceNotFoundException("Car not found");
-        carRepository.delete(car);
+        if(userInfo.roles().contains(Constants.SYSADMIN) || userInfo.roles().contains(Constants.ADMIN) || car.getUser().getUserId().equals(userInfo.currentUser().getUserId())){
+            carRepository.delete(car);
+        }else throw new NotAllowedOperationException("You don't have permissions to delete this car. You can only delete your own car");
+
+
     }
 
     @Override

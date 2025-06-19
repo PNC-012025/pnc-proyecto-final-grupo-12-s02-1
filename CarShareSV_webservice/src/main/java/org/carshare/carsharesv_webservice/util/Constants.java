@@ -21,6 +21,7 @@ public final class Constants {
     //Other methods
     public static final String REGISTER = "/register";
     public static final String LOGIN = "/login";
+    public static final String GET_ALL_VISIBLE = "/getAllVisible";
     public static final String GET_ALL_ACTIVE = "/getAllActive";
     public static final String GET_ALL_NOT_ACTIVE = "/getAllNotActive";
     public static final String GET_BY_USERNAME_OR_EMAIL = "/getByUsernameOrEmail";
@@ -38,6 +39,7 @@ public final class Constants {
     public static final String UPDATE_EMAIL = "/updateEmail";
     public static final String UPDATE_PHONENUMBER = "/updatePhoneNumber";
     public static final String UPDATE_DAILY_PRICE = "/updateDailyPrice";
+    public static final String UPDATE_DESCRIPTION = "/updateDescription";
     public static final String GRANT_ADMIN_ROLE = "/grantAdminRole";
     public static final String REVOKE_ADMIN_ROLE = "/revokeAdminRole";
 

@@ -57,4 +57,13 @@ public class ReservationController {
                 .status(HttpStatus.OK)
                 .build().buildResponse();
     }
+
+    @GetMapping(GET_ALL_CAR_RESERVED_DATES)
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
+    public ResponseEntity<GenericResponse> getAllCarReservedDates(@RequestParam("id") UUID carId) {
+        return GenericResponse.builder()
+                .data(reservationService.getAllCarReservedDates(carId))
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
 }

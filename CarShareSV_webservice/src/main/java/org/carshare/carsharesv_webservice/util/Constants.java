@@ -45,6 +45,7 @@ public final class Constants {
     public static final String REVOKE_ADMIN_ROLE = "/revokeAdminRole";
     public static final String CANCEL_RESERVATION = "/cancel";
     public static final String GET_ALL_RESERVATIONS_BY_USER = "/getAllByUser";
+    public static final String GET_ALL_CAR_RESERVED_DATES = "/getAllCarReservedDates";
 
     //Roles
     public static final String USER = "ROLE_USER";

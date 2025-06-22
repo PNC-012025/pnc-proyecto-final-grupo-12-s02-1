@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -129,5 +130,26 @@ public class ReservationServiceImpl implements iReservationService {
             } else throw new ReservationAlreadyStartedException("You can only cancel a reservation before it has started");
         } else throw new NotAllowedOperationException("You don't have permissions to cancel this reservation. You can only cancel your own reservations");
     }
+
+    @Override
+    public List<LocalDate> getAllCarReservedDates(UUID carId) {
+        List<Reservation> reservations = reservationRepository.findAllByCarId(carId);
+
+        return reservations.stream()
+                .filter(r -> "ACTIVE".equals(r.getStatus())) // Only ACTIVE reservations
+                .flatMap(reservation -> {
+                    List<LocalDate> dates = new ArrayList<>();
+                    LocalDate date = reservation.getStartDate();
+                    while (!date.isAfter(reservation.getEndDate())) {
+                        dates.add(date);
+                        date = date.plusDays(1);
+                    }
+                    return dates.stream();
+                })
+                .distinct()
+                .sorted()
+                .toList();
+    }
+
 
 }

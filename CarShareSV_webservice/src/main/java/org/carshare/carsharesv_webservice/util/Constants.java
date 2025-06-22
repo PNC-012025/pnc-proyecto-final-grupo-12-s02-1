@@ -43,6 +43,8 @@ public final class Constants {
     public static final String UPDATE_DESCRIPTION = "/updateDescription";
     public static final String GRANT_ADMIN_ROLE = "/grantAdminRole";
     public static final String REVOKE_ADMIN_ROLE = "/revokeAdminRole";
+    public static final String CANCEL_RESERVATION = "/cancel";
+    public static final String GET_ALL_RESERVATIONS_BY_USER = "/getAllByUser";
 
     //Roles
     public static final String USER = "ROLE_USER";

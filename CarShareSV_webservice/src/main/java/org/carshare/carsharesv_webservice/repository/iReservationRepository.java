@@ -14,6 +14,7 @@ public interface iReservationRepository extends JpaRepository<Reservation, UUID>
 
     @Query(value = "SELECT COUNT(r) > 0 FROM reservation r " +
             "WHERE r.car_id = :carId " +
+            "AND r.status = 'ACTIVE'" +
             "AND ((r.start_date BETWEEN :startDate AND :endDate) " +
             "OR (r.end_date BETWEEN :startDate AND :endDate) " +
             "OR (:startDate BETWEEN r.start_date AND r.end_date) " +
@@ -24,7 +25,11 @@ public interface iReservationRepository extends JpaRepository<Reservation, UUID>
             @Param("endDate") LocalDate endDate);
 
 
-    List<Reservation> findAllByCarId(UUID carId);
+    @Query(value = "SELECT * FROM reservation r WHERE r.car_id = :carId", nativeQuery = true)
+    List<Reservation> findAllByCarId(@Param("carId") UUID carId);
+
+    @Query(value = "SELECT * FROM reservation r WHERE r.user_id = :userId", nativeQuery = true)
+    List<Reservation> findAllByUserId(@Param("userId") UUID userId);
 
     @Query("SELECT r FROM Reservation r WHERE r.status = 'ACTIVE' AND r.endDate < :currentDate")
     List<Reservation> findExpiredActiveReservations(@Param("currentDate") LocalDate currentDate);

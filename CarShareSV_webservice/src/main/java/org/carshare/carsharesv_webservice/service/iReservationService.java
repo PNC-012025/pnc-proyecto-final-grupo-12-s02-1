@@ -9,4 +9,6 @@ import java.util.UUID;
 public interface iReservationService {
     ReservationResponseDTO createReservation(CreateReservationDTO reservationDTO);
     List<ReservationResponseDTO> getAllCarReservations(UUID carId);
+    List<ReservationResponseDTO> getAllUserReservations(UUID userId);
+    void cancelReservation(UUID reservationId);
 }

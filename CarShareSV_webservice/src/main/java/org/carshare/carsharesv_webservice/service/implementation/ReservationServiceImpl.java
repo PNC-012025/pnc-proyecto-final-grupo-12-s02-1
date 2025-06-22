@@ -97,5 +97,37 @@ public class ReservationServiceImpl implements iReservationService {
         return carReservations;
     }
 
+    @Override
+    public List<ReservationResponseDTO> getAllUserReservations(UUID userId) {
+        CurrentUserInfo userInfo = usefullMethods.getUserInfo(null);
+        User currentUser = userRepository.findOneByUserId(userInfo.currentUser().getUserId());
+        List<ReservationResponseDTO> carReservations;
+
+        if(currentUser == null) throw new ResourceNotFoundException("User not found");
+
+        if(userInfo.roles().contains(Constants.SYSADMIN) || userInfo.roles().contains(Constants.ADMIN) || currentUser.getUserId().equals(userId)) {
+            carReservations = reservationRepository.findAllByUserId(userId).stream().map(reservation -> modelMapper.map(reservation, ReservationResponseDTO.class)).toList();
+        } else throw new NotAllowedOperationException("You don't have permissions to view this car's reservations. You can only view your own car's reservations");
+
+        return carReservations;
+    }
+
+
+    @Override
+    public void cancelReservation(UUID reservationId) {
+        CurrentUserInfo userInfo = usefullMethods.getUserInfo(null);
+        User currentUser = userRepository.findOneByUserId(userInfo.currentUser().getUserId());
+        Reservation reservation = reservationRepository.findById(reservationId).orElse(null);
+
+        if(currentUser == null) throw new ResourceNotFoundException("User not found");
+        if(reservation == null) throw new ResourceNotFoundException("Reservation not found");
+
+        if(userInfo.roles().contains(Constants.SYSADMIN) || userInfo.roles().contains(Constants.ADMIN) || reservation.getUser().getUserId().equals(currentUser.getUserId())) {
+            if(LocalDate.now().isBefore(reservation.getStartDate())) {
+                reservation.setStatus(Constants.CANCELLED);
+                reservationRepository.save(reservation);
+            } else throw new ReservationAlreadyStartedException("You can only cancel a reservation before it has started");
+        } else throw new NotAllowedOperationException("You don't have permissions to cancel this reservation. You can only cancel your own reservations");
+    }
 
 }

@@ -284,4 +284,19 @@ public class GlobalErrorHandler {
                 .status(HttpStatus.CONFLICT)
                 .build().buildResponse();
     }
+
+    @ExceptionHandler(ReservationAlreadyStartedException.class)
+    public ResponseEntity<GenericResponse> handleReservationAlreadyStartedException(ReservationAlreadyStartedException ex, WebRequest request) {
+
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return GenericResponse.builder()
+                .data(errorResponse)
+                .status(HttpStatus.CONFLICT)
+                .build().buildResponse();
+    }
 }

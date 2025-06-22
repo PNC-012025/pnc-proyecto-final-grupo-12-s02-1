@@ -34,6 +34,5 @@ public class ReservationScheduler {
             // Update the status of the expired reservations to FINISHED
             reservationRepository.updateReservationsStatus(expiredReservationIds, Constants.FINISHED);
         }
-
     }
 }

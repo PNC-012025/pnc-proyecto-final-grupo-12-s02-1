@@ -10,6 +10,7 @@ public final class Constants {
     public static final String AUTH_CONTROLLER = "/auth";
     public static final String USER_CONTROLLER = "/user";
     public static final String CARS_CONTROLLER = "/cars";
+    public static final String RESERVATION_CONTROLLER = "/reservation";
 
     //Common methods
     public static final String CREATE = "/create";

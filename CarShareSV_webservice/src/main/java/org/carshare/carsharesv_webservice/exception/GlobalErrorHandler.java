@@ -239,4 +239,49 @@ public class GlobalErrorHandler {
                 .status(HttpStatus.CONFLICT)
                 .build().buildResponse();
     }
+
+    @ExceptionHandler(NotAvailableDatesException.class)
+    public ResponseEntity<GenericResponse> handleNotAvailableDatesException(NotAvailableDatesException ex, WebRequest request) {
+
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return GenericResponse.builder()
+                .data(errorResponse)
+                .status(HttpStatus.CONFLICT)
+                .build().buildResponse();
+    }
+
+    @ExceptionHandler(PastDateException.class)
+    public ResponseEntity<GenericResponse> handlePastDateException(PastDateException ex, WebRequest request) {
+
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return GenericResponse.builder()
+                .data(errorResponse)
+                .status(HttpStatus.CONFLICT)
+                .build().buildResponse();
+    }
+
+    @ExceptionHandler(InvalidDateRangeException.class)
+    public ResponseEntity<GenericResponse> handleInvalidDateRangeException(InvalidDateRangeException ex, WebRequest request) {
+
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return GenericResponse.builder()
+                .data(errorResponse)
+                .status(HttpStatus.CONFLICT)
+                .build().buildResponse();
+    }
 }

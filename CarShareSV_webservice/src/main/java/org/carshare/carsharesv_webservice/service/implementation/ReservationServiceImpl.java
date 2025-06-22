@@ -14,12 +14,10 @@ import org.carshare.carsharesv_webservice.repository.iUserRepository;
 import org.carshare.carsharesv_webservice.service.iReservationService;
 import org.carshare.carsharesv_webservice.util.Constants;
 import org.carshare.carsharesv_webservice.util.CurrentUserInfo;
-import org.carshare.carsharesv_webservice.util.Status;
 import org.carshare.carsharesv_webservice.util.UsefullMethods;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.lang.constant.Constable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -73,7 +71,7 @@ public class ReservationServiceImpl implements iReservationService {
         newReservation.setEndDate(reservationDTO.getEndDate());
         newReservation.setAddress(reservationDTO.getAddress());
         newReservation.setTotal(totalPrice);
-        newReservation.setStatus(Status.ACTIVE);
+        newReservation.setStatus(Constants.ACTIVE);
         newReservation.setUser(currentUser);
         newReservation.setCar(car);
 

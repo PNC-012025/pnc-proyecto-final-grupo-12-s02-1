@@ -48,4 +48,9 @@ public final class Constants {
     public static final String USER = "ROLE_USER";
     public static final String ADMIN = "ROLE_ADMIN";
     public static final String SYSADMIN = "ROLE_SYSADMIN";
+
+    // Reservation Status
+    public static final String ACTIVE = "ACTIVE";
+    public static final String FINISHED = "FINISHED";
+    public static final String CANCELLED = "CANCELLED";
 }

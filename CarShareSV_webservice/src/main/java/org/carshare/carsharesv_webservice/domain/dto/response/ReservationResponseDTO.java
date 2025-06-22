@@ -1,10 +1,6 @@
 package org.carshare.carsharesv_webservice.domain.dto.response;
 
-import jakarta.persistence.*;
 import lombok.Data;
-import org.carshare.carsharesv_webservice.domain.entity.Car;
-import org.carshare.carsharesv_webservice.domain.entity.User;
-import org.carshare.carsharesv_webservice.util.Status;
 
 import java.time.LocalDate;
 

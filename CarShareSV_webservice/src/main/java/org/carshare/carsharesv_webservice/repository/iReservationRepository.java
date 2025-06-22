@@ -2,6 +2,7 @@ package org.carshare.carsharesv_webservice.repository;
 
 import org.carshare.carsharesv_webservice.domain.entity.Reservation;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -24,4 +25,12 @@ public interface iReservationRepository extends JpaRepository<Reservation, UUID>
 
 
     List<Reservation> findAllByCarId(UUID carId);
+
+    @Query("SELECT r FROM Reservation r WHERE r.status = 'ACTIVE' AND r.endDate < :currentDate")
+    List<Reservation> findExpiredActiveReservations(@Param("currentDate") LocalDate currentDate);
+
+    @Modifying
+    @Query("UPDATE Reservation r SET r.status = :status WHERE r.reservationId IN :reservationIds")
+    void updateReservationsStatus(@Param("reservationIds") List<UUID> reservationIds, @Param("status") String status);
+
 }

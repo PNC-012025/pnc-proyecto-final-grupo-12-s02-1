@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.carshare.carsharesv_webservice.util.Status;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -30,9 +29,8 @@ public class Reservation {
     @Column
     private Float total;
 
-    @Enumerated(EnumType.STRING)
     @Column
-    private Status status; //ACTIVE, FINISHED, CANCELED
+    private String status; //ACTIVE, FINISHED, CANCELED
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_reservation_user"))

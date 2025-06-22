@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.Length;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateReviewDto {
+public class CreateReviewDTO {
 
     @NotBlank
     @NotEmpty

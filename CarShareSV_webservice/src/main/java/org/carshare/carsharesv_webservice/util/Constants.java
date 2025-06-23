@@ -11,6 +11,7 @@ public final class Constants {
     public static final String USER_CONTROLLER = "/user";
     public static final String CARS_CONTROLLER = "/cars";
     public static final String RESERVATION_CONTROLLER = "/reservation";
+    public static final String REVIEWS_CONTROLLER = "/reviews";
 
     //Common methods
     public static final String CREATE = "/create";
@@ -32,6 +33,9 @@ public final class Constants {
     public static final String GET_ALL_CARS_BY_YEAR = "/getAllCarsByYear";
     public static final String GET_CAR_BY_ID = "/getCarById";
     public static final String GET_CAR_BY_USER_ID = "/getCarByUserId";
+    public static final String GET_REVIEW_BY_ID = "/getReviewById";
+    public static final String GET_ALL_REVIEW_BY_USER_ID = "/getAllReviewByUserId";
+    public static final String GET_ALL_REVIEW_BY_CAR_ID = "/getAllReviewByCarId";
     public static final String ACTIVATE = "/activate";
     public static final String DEACTIVATE = "/deactivate";
     public static final String UPDATE_FIRSTNAME = "/updateFirstName";
@@ -41,6 +45,8 @@ public final class Constants {
     public static final String UPDATE_PHONENUMBER = "/updatePhoneNumber";
     public static final String UPDATE_DAILY_PRICE = "/updateDailyPrice";
     public static final String UPDATE_DESCRIPTION = "/updateDescription";
+    public static final String UPDATE_COMMENT = "/updateComment";
+    public static final String UPDATE_RATING = "/updateRating";
     public static final String GRANT_ADMIN_ROLE = "/grantAdminRole";
     public static final String REVOKE_ADMIN_ROLE = "/revokeAdminRole";
     public static final String CANCEL_RESERVATION = "/cancel";

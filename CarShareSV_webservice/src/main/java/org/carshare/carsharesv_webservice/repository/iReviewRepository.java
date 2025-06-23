@@ -10,6 +10,7 @@ import java.util.UUID;
 public interface iReviewRepository extends JpaRepository<Review, UUID> {
 
     Optional<Review> findReviewByReviewId(UUID reviewId);
+    List<Review> findAll();
     List<Review> findReviewByUserUsername(String username);
     List<Review> findReviewByCarCarId(UUID carId);
 

@@ -19,6 +19,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +46,12 @@ public class ReviewServiceImpl implements iReviewService {
 
         return modelMapper.map(newReview, ReviewResponseDTO.class);
 
+    }
+
+    public List<ReviewResponseDTO> getAllReviews(){
+        List<ReviewResponseDTO> reviews = reviewRepository.findAll().stream().map(review -> modelMapper.map(review, ReviewResponseDTO.class)).toList();
+        if(reviews.isEmpty()) throw new ResourceNotFoundException("Reviews not found");
+        return reviews;
     }
 
     public ReviewResponseDTO getReviewById(UUID id) {

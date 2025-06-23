@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.UUID;
 
 public interface iReviewService {
-    ReviewResponseDTO saveReview(CreateReviewDTO reviewDTO);
+    ReviewResponseDTO saveReview(CreateReviewDTO reviewDTO, UUID carId);
     List<ReviewResponseDTO> getReviewByUserUsername(String username);
     List<ReviewResponseDTO> getReviewByCarCarId(UUID carId);
     ReviewResponseDTO getReviewById(UUID reviewId);

@@ -19,6 +19,7 @@ public final class Constants {
     public static final String GET_BY_ID = "/getById";
     public static final String DELETE = "/delete";
     public static final String UPDATE = "/update";
+    public static final String WHOAMI = "/whoami";
 
     //Other methods
     public static final String REGISTER = "/register";

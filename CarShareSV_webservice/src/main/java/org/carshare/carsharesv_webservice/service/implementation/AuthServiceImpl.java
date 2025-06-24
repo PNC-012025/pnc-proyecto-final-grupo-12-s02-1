@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.carshare.carsharesv_webservice.domain.dto.request.CreateUserDTO;
 import org.carshare.carsharesv_webservice.domain.dto.request.LoginRequestDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.UserResponseDTO;
+import org.carshare.carsharesv_webservice.domain.dto.response.WhoamiResponseDTO;
 import org.carshare.carsharesv_webservice.domain.entity.Role;
 import org.carshare.carsharesv_webservice.domain.entity.User;
 import org.carshare.carsharesv_webservice.exception.ExistingUserException;
@@ -11,6 +12,8 @@ import org.carshare.carsharesv_webservice.repository.iRoleRepository;
 import org.carshare.carsharesv_webservice.repository.iUserRepository;
 import org.carshare.carsharesv_webservice.security.JwtProvider;
 import org.carshare.carsharesv_webservice.service.iAuthService;
+import org.carshare.carsharesv_webservice.util.CurrentUserInfo;
+import org.carshare.carsharesv_webservice.util.UsefullMethods;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.Authentication;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.carshare.carsharesv_webservice.util.Constants.USER;
@@ -33,6 +37,7 @@ public class AuthServiceImpl implements iAuthService {
     private final iUserRepository userRepository;
     private final iRoleRepository roleRepository;
     private final ModelMapper modelMapper;
+    private final UsefullMethods usefullMethods;
 
     @Override
     public UserResponseDTO register(CreateUserDTO userDTO) throws Exception {
@@ -81,5 +86,18 @@ public class AuthServiceImpl implements iAuthService {
 
         // Generates a JWT token for the authenticated user
         return jwtProvider.generateToken(authentication);
+    }
+
+    @Override
+    public WhoamiResponseDTO whoami() {
+        CurrentUserInfo userInfo = usefullMethods.getUserInfo(null);
+
+        User currentUser = userInfo.currentUser();
+        List<String> roles = userInfo.roles();
+
+        WhoamiResponseDTO response = modelMapper.map(currentUser, WhoamiResponseDTO.class);
+        response.setRoles(roles);
+
+        return response;
     }
 }

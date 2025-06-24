@@ -40,4 +40,12 @@ public class AuthController {
 
         return ResponseEntity.ok(res);
     }
+
+    @GetMapping(WHOAMI)
+    public ResponseEntity<GenericResponse> whoami() {
+        return GenericResponse.builder()
+                .data(authService.whoami())
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
 }

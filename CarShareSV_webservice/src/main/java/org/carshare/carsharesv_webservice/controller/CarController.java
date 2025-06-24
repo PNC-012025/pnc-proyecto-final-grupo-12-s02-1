@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import static org.carshare.carsharesv_webservice.util.Constants.*;
 
+@CrossOrigin
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(API + CARS_CONTROLLER)

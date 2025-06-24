@@ -10,13 +10,11 @@ import org.carshare.carsharesv_webservice.domain.dto.response.UserResponseDTO;
 import org.carshare.carsharesv_webservice.service.iAuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.carshare.carsharesv_webservice.util.Constants.*;
 
+@CrossOrigin
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(API + AUTH_CONTROLLER)

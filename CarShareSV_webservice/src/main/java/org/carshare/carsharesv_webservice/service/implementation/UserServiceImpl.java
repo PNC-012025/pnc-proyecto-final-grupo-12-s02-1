@@ -1,8 +1,6 @@
 package org.carshare.carsharesv_webservice.service.implementation;
 
-import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
-import org.carshare.carsharesv_webservice.domain.dto.GenericResponse;
 import org.carshare.carsharesv_webservice.domain.dto.response.RoleResponseDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.UserResponseDTO;
 import org.carshare.carsharesv_webservice.domain.entity.Role;
@@ -10,23 +8,16 @@ import org.carshare.carsharesv_webservice.domain.entity.User;
 import org.carshare.carsharesv_webservice.exception.*;
 import org.carshare.carsharesv_webservice.repository.iRoleRepository;
 import org.carshare.carsharesv_webservice.repository.iUserRepository;
-import org.carshare.carsharesv_webservice.security.JwtProvider;
 import org.carshare.carsharesv_webservice.service.iUserService;
 import org.carshare.carsharesv_webservice.util.Constants;
 import org.carshare.carsharesv_webservice.util.CurrentUserInfo;
 import org.carshare.carsharesv_webservice.util.UsefullMethods;
-import org.hibernate.validator.constraints.Length;
 import org.modelmapper.ModelMapper;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.context.request.WebRequest;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;

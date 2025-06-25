@@ -16,7 +16,7 @@ import java.util.UUID;
 
 import static org.carshare.carsharesv_webservice.util.Constants.*;
 
-@CrossOrigin
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(API + REVIEWS_CONTROLLER)

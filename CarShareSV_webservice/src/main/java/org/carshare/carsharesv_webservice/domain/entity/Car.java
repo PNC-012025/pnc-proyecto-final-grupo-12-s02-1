@@ -34,6 +34,9 @@ public class Car {
     @Column
     private Boolean visible;
 
+    @Column
+    private String location;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_car_user"))
     private User user;
@@ -49,4 +52,8 @@ public class Car {
     @ManyToOne
     @JoinColumn(name = "brand_id", nullable = false, foreignKey = @ForeignKey(name = "fk_car_brand"))
     private Brand brand;
+
+    @ManyToOne
+    @JoinColumn(name = "transmission_id", nullable = false, foreignKey = @ForeignKey(name = "fk_car_transmission"))
+    private Transmission transmission;
 }

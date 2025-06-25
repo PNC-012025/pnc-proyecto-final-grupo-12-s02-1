@@ -2,6 +2,11 @@ INSERT INTO "role" VALUES(1, 'ROLE_USER') ON CONFLICT DO NOTHING;
 INSERT INTO "role" VALUES(2, 'ROLE_ADMIN') ON CONFLICT DO NOTHING;
 INSERT INTO "role" VALUES(3, 'ROLE_SYSADMIN') ON CONFLICT DO NOTHING;
 
+INSERT INTO "transmission" (transmission) VALUES
+('Standard'),
+('Automatic')
+ON CONFLICT DO NOTHING;
+
 INSERT INTO "brand" (brand) VALUES
 ('Toyota'),
 ('Hyundai'),

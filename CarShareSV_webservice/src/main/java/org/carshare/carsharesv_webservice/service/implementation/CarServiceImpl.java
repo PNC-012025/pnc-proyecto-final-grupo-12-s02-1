@@ -120,7 +120,7 @@ public class CarServiceImpl implements iCarService {
 
     @Override
     public List<CarResponseDTO> getAllCarsByTransmission(Integer transmissionId){
-        List<CarResponseDTO> cars = carRepository.findCarsByTransmissionAndVisible(transmissionId, true).stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
+        List<CarResponseDTO> cars = carRepository.findCarsByTransmissionTransmissionIdAndVisible(transmissionId, true).stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
 
         if(cars.isEmpty()) throw new ResourceNotFoundException("No Cars found");
         return cars;

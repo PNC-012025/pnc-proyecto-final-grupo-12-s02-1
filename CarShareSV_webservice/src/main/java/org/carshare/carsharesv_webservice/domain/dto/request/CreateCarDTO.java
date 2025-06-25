@@ -40,6 +40,11 @@ public class CreateCarDTO {
   @Length(min = 3, max = 100, message = "Description must be min 3 and max 100 characters long")
   private String description;
 
+  @NotEmpty
+  @NotBlank
+  @Length(min = 3, max = 512, message = "Location must be min 3 and max 512 characters long")
+  private String location;
+
   @NotNull
   @Min(2015)
   @Max(2025)
@@ -54,4 +59,9 @@ public class CreateCarDTO {
   @NotNull
   @NotBlank
   private String brand;
+
+  @NotEmpty
+  @NotNull
+  @NotBlank
+  private String transmission;
 }

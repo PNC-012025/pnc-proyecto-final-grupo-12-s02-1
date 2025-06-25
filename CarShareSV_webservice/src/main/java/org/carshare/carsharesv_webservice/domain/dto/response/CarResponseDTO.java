@@ -25,6 +25,8 @@ public class CarResponseDTO {
 
     private Float dailyPrice;
 
+    private String location;
+
     private Integer year;
 
     private String username;
@@ -32,5 +34,7 @@ public class CarResponseDTO {
     private String model;
 
     private String brand;
+
+    private String transmission;
 
 }

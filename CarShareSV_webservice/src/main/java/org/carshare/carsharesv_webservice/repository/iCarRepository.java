@@ -18,5 +18,5 @@ public interface iCarRepository extends JpaRepository<Car, UUID> {
     List<Car> findCarsByBrandBrandIdAndVisible(Integer brandId, Boolean visible);
     List<Car> findCarsByModelModelIdAndVisible(Integer modelId, Boolean visible);
     List<Car> findCarsByYearYearIdAndVisible(Integer yearId, Boolean visible);
-
+    List<Car> findCarsByTransmissionAndVisible(String transmission, Boolean visible);
 }

@@ -135,4 +135,16 @@ public class CarController {
                 .status(HttpStatus.OK)
                 .build().buildResponse();
     }
+
+    @PatchMapping(SET_CAR_VISIBILITY + "/{carId}")
+    @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
+    public ResponseEntity<GenericResponse> setCarVisibility(@PathVariable("carId") UUID carId, @RequestParam("visible") Boolean visible) {
+        carService.updateCarVisibility(carId, visible);
+
+        return GenericResponse.builder()
+                .message("Visibility updated successfully")
+                .status(HttpStatus.OK)
+                .build().buildResponse();
+    }
+
 }

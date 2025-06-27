@@ -189,4 +189,17 @@ public class CarServiceImpl implements iCarService {
         if(cars.isEmpty()) throw new ResourceNotFoundException("No Cars found");
         return cars.stream().map(car -> modelMapper.map(car, CarResponseDTO.class)).toList();
     }
+
+    @Override
+    public void updateCarVisibility(UUID carId, Boolean visible) {
+        Car car = carRepository.findCarByCarId(carId).orElse(null);
+        CurrentUserInfo userInfo = usefullMethods.getUserInfo(null);
+
+        if (car == null) throw new ResourceNotFoundException("Car not found");
+        if(userInfo.roles().contains(Constants.SYSADMIN) || userInfo.roles().contains(Constants.ADMIN) || car.getUser().getUserId().equals(userInfo.currentUser().getUserId())){
+            car.setVisible(visible);
+            carRepository.save(car);
+        } else throw new NotAllowedOperationException("You don't have permissions to update this car. You can only update your own car");
+    }
+
 }

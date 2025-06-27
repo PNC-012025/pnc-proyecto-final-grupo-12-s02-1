@@ -53,6 +53,8 @@ public final class Constants {
     public static final String CANCEL_RESERVATION = "/cancel";
     public static final String GET_ALL_RESERVATIONS_BY_USER = "/getAllByUser";
     public static final String GET_ALL_CAR_RESERVED_DATES = "/getAllCarReservedDates";
+    public static final String SET_CAR_VISIBILITY = "/setCarVisibility";
+
 
     //Roles
     public static final String USER = "ROLE_USER";

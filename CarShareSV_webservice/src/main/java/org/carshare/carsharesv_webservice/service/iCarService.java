@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jdk.jfr.BooleanFlag;
 import org.carshare.carsharesv_webservice.domain.dto.request.CreateCarDTO;
 import org.carshare.carsharesv_webservice.domain.dto.request.UpdateCarDescriptionDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.CarResponseDTO;
@@ -26,4 +27,5 @@ public interface iCarService {
     CarResponseDTO updateCarByDailyPrice(UUID carId, @NotNull @Positive float price);
     CarResponseDTO updateCarByDescription(UUID cardId, UpdateCarDescriptionDTO updateCarDescriptionDTO);
     void deleteCarById(UUID carId);
+    void updateCarVisibility(UUID carId, @NotNull Boolean visible);
 }

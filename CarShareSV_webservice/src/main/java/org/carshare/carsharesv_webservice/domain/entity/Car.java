@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -56,4 +58,7 @@ public class Car {
     @ManyToOne
     @JoinColumn(name = "transmission_id", nullable = false, foreignKey = @ForeignKey(name = "fk_car_transmission"))
     private Transmission transmission;
+
+    @OneToMany(mappedBy = "imageId", cascade = CascadeType.ALL)
+    private List<Image> carImages = new ArrayList<>();
 }

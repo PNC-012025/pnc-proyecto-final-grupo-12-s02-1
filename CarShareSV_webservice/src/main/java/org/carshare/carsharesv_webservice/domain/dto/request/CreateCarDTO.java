@@ -5,9 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.carshare.carsharesv_webservice.domain.entity.Brand;
+import org.carshare.carsharesv_webservice.domain.entity.Image;
 import org.carshare.carsharesv_webservice.domain.entity.Model;
 import org.carshare.carsharesv_webservice.domain.entity.Year;
 import org.hibernate.validator.constraints.Length;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -64,4 +67,7 @@ public class CreateCarDTO {
   @NotNull
   @NotBlank
   private String transmission;
+
+  @NotNull
+  private List<String> images;
 }

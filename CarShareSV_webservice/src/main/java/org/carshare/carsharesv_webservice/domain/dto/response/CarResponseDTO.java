@@ -1,11 +1,9 @@
 package org.carshare.carsharesv_webservice.domain.dto.response;
 
 import lombok.Data;
-import org.carshare.carsharesv_webservice.domain.entity.Brand;
-import org.carshare.carsharesv_webservice.domain.entity.Model;
-import org.carshare.carsharesv_webservice.domain.entity.User;
-import org.carshare.carsharesv_webservice.domain.entity.Year;
+import org.carshare.carsharesv_webservice.domain.entity.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -36,5 +34,7 @@ public class CarResponseDTO {
     private String brand;
 
     private String transmission;
+
+    private List<String> images;
 
 }

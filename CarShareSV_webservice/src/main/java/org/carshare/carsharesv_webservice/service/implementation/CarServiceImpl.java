@@ -16,9 +16,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -30,6 +30,7 @@ public class CarServiceImpl implements iCarService {
     private final iBrandRepository brandRepository;
     private final iYearRepository yearRepository;
     private final iTransmissionRepository transmissionRepository;
+    private final iImageRepository imageRepository;
     private final ModelMapper modelMapper;
     private final UsefullMethods usefullMethods;
 
@@ -66,13 +67,26 @@ public class CarServiceImpl implements iCarService {
         newCar.setBrand(brand);
         newCar.setTransmission(transmission);
         newCar.setUser(userInfo.currentUser());
+        newCar.setCarImages(new ArrayList<>());
         newCar.setDailyPrice(carDTO.getDailyPrice());
         newCar.setDescription(carDTO.getDescription());
         newCar.setVisible(true);
 
-        carRepository.save(newCar);
+        Car savedCar = carRepository.save(newCar);
 
-        return modelMapper.map(newCar, CarResponseDTO.class);
+        List<Image> images = new ArrayList<>();
+
+        for (String url : carDTO.getImages()) {
+            Image newImage = new Image();
+            newImage.setUrl(url);
+            newImage.setCar(savedCar);
+            images.add(imageRepository.save(newImage));
+        }
+
+        savedCar.setCarImages(images);
+        carRepository.save(savedCar);
+
+        return modelMapper.map(savedCar, CarResponseDTO.class);
     }
 
     @Override

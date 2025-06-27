@@ -57,6 +57,8 @@ public class CarServiceImpl implements iCarService {
 
         if (!model.getBrand().getBrandId().equals(brand.getBrandId())) throw new NotValidModelForBrandException("The model does not belong to the selected brand");
 
+        List<Image> images = new ArrayList<>();
+
         newCar.setPlateNumber(carDTO.getPlateNumber());
         newCar.setDescription(carDTO.getDescription());
         newCar.setModel(model);
@@ -67,24 +69,19 @@ public class CarServiceImpl implements iCarService {
         newCar.setBrand(brand);
         newCar.setTransmission(transmission);
         newCar.setUser(userInfo.currentUser());
-        newCar.setCarImages(new ArrayList<>());
+        newCar.setCarImages(images);
         newCar.setDailyPrice(carDTO.getDailyPrice());
         newCar.setDescription(carDTO.getDescription());
         newCar.setVisible(true);
 
-        Car savedCar = carRepository.save(newCar);
-
-        List<Image> images = new ArrayList<>();
-
         for (String url : carDTO.getImages()) {
             Image newImage = new Image();
             newImage.setUrl(url);
-            newImage.setCar(savedCar);
-            images.add(imageRepository.save(newImage));
+            newImage.setCar(newCar);
+            newCar.getCarImages().add(newImage);
         }
 
-        savedCar.setCarImages(images);
-        carRepository.save(savedCar);
+        Car savedCar = carRepository.save(newCar);
 
         return modelMapper.map(savedCar, CarResponseDTO.class);
     }

@@ -59,6 +59,6 @@ public class Car {
     @JoinColumn(name = "transmission_id", nullable = false, foreignKey = @ForeignKey(name = "fk_car_transmission"))
     private Transmission transmission;
 
-    @OneToMany(mappedBy = "imageId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private List<Image> carImages = new ArrayList<>();
 }

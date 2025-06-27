@@ -59,9 +59,9 @@ public class CarController {
                 .build().buildResponse();
     }
 
-    @DeleteMapping(DELETE)
+    @DeleteMapping(DELETE + "/{carId}")
     @PreAuthorize("hasAnyRole('SYSADMIN', 'ADMIN', 'USER')")
-    public ResponseEntity<GenericResponse> deleteCar(@RequestParam("id") UUID carId) {
+    public ResponseEntity<GenericResponse> deleteCar(@PathVariable("carId") UUID carId) {
         carService.deleteCarById(carId);
         return GenericResponse.builder()
                 .message("Car deleted Successfully")

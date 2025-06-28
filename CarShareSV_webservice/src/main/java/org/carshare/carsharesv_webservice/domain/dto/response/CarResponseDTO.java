@@ -29,6 +29,8 @@ public class CarResponseDTO {
 
     private String username;
 
+    private String phoneNumber;
+
     private String model;
 
     private String brand;

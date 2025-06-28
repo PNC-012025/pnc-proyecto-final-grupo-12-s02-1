@@ -32,7 +32,8 @@ public class MapperConfig {
 
         // Reservation -> ReservationResponseDTO
         modelMapper.typeMap(Reservation.class, ReservationResponseDTO.class)
-                .addMapping(src -> src.getUser().getUsername(), ReservationResponseDTO::setReservingUsername);
+                .addMapping(src -> src.getUser().getUsername(), ReservationResponseDTO::setReservingUsername)
+                .addMapping(src -> src.getCar(), ReservationResponseDTO::setReservedCar);
 
         return modelMapper;
     }

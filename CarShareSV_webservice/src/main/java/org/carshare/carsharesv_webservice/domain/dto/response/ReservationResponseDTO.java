@@ -1,6 +1,7 @@
 package org.carshare.carsharesv_webservice.domain.dto.response;
 
 import lombok.Data;
+import org.carshare.carsharesv_webservice.domain.entity.Car;
 
 import java.time.LocalDate;
 
@@ -18,5 +19,5 @@ public class ReservationResponseDTO {
 
     private String reservingUsername;
 
-    private String carPlateNumber;
+    private CarResponseDTO reservedCar;
 }

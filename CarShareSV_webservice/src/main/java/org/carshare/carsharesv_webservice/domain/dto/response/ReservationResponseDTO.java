@@ -4,9 +4,12 @@ import lombok.Data;
 import org.carshare.carsharesv_webservice.domain.entity.Car;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Data
 public class ReservationResponseDTO {
+    private UUID reservationId;
+
     private LocalDate startDate;
 
     private LocalDate endDate;

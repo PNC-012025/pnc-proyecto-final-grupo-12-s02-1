@@ -27,6 +27,7 @@ public class MapperConfig {
                 .addMapping(src -> src.getBrand().getBrand(), CarResponseDTO::setBrand)
                 .addMapping(src -> src.getYear().getYear(), CarResponseDTO::setYear)
                 .addMapping(src -> src.getUser().getUsername(), CarResponseDTO::setUsername)
+                .addMapping(src -> src.getUser().getPhoneNumber(), CarResponseDTO::setPhoneNumber)
                 .addMappings(mapper -> mapper.using(carImagesToUrlListConverter())
                         .map(src -> src, CarResponseDTO::setImages));
 

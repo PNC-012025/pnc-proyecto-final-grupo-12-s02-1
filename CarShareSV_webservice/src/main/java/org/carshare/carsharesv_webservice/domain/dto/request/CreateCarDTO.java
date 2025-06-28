@@ -40,12 +40,12 @@ public class CreateCarDTO {
   @NotEmpty
   @NotNull
   @NotBlank
-  @Length(min = 3, max = 100, message = "Description must be min 3 and max 100 characters long")
+  @Length(min = 3, max = 512, message = "Description must be min 3 and max 255 characters long")
   private String description;
 
   @NotEmpty
   @NotBlank
-  @Length(min = 3, max = 512, message = "Location must be min 3 and max 512 characters long")
+  @Length(min = 3, max = 255, message = "Location must be min 3 and max 512 characters long")
   private String location;
 
   @NotNull

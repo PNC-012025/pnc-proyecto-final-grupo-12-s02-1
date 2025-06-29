@@ -5,8 +5,10 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.carshare.carsharesv_webservice.domain.entity.Role;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -28,4 +30,6 @@ public class UserResponseDTO {
     private String email;
 
     private Boolean active;
+
+    private List<String> roles;
 }

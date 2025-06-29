@@ -26,7 +26,7 @@ public class Review {
     @JoinColumn(name = "car_id", nullable = false, foreignKey = @ForeignKey(name = "fk_review_car"))
     private Car car;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_review_user"))
     private User user;
 }

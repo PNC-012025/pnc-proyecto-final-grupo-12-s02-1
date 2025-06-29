@@ -1,7 +1,10 @@
 package org.carshare.carsharesv_webservice.domain.dto.response;
 
+import lombok.Data;
+
 import java.util.UUID;
 
+@Data
 public class ReviewResponseDTO {
 
     private UUID reviewId;
@@ -10,8 +13,8 @@ public class ReviewResponseDTO {
 
     private Integer rating;
 
-    private String userName;
+    private String reviewUsername;
 
-    private UUID carId;
+    private UUID reviewCarId;
 
 }

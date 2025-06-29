@@ -2,6 +2,7 @@ package org.carshare.carsharesv_webservice.configuration;
 
 import org.carshare.carsharesv_webservice.domain.dto.response.CarResponseDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.ReservationResponseDTO;
+import org.carshare.carsharesv_webservice.domain.dto.response.ReviewResponseDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.UserResponseDTO;
 import org.carshare.carsharesv_webservice.domain.entity.*;
 import org.modelmapper.Converter;
@@ -34,6 +35,10 @@ public class MapperConfig {
 
         modelMapper.typeMap(User.class, UserResponseDTO.class)
                 .addMappings(mapper -> mapper.using(userRolesToListConverter()).map(src -> src, UserResponseDTO::setRoles));
+
+        modelMapper.typeMap(Review.class, ReviewResponseDTO.class)
+                .addMapping(src -> src.getUser().getUsername(), ReviewResponseDTO::setReviewUsername)
+                .addMapping(src -> src.getCar().getCarId(), ReviewResponseDTO::setReviewCarId);
 
         return modelMapper;
     }

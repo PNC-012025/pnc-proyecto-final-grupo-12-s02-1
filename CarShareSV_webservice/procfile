@@ -1,0 +1,1 @@
+web: java -jar target/pnc-proyecto-final-grupo-12-s02-1-0.0.1-SNAPSHOT.jar

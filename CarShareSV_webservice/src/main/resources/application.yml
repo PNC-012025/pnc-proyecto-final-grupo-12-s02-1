@@ -6,9 +6,7 @@ spring:
         name: CarShareSV_webservice
 
     datasource:
-        url: jdbc:postgresql://localhost:5432/carsharesv
-        username: postgres
-        password: 1234
+        url: ${DATABASE_URL}
 
     jpa:
         database: postgresql

@@ -7,6 +7,7 @@ import org.carshare.carsharesv_webservice.domain.dto.response.UserResponseDTO;
 import org.carshare.carsharesv_webservice.domain.dto.response.WhoamiResponseDTO;
 import org.carshare.carsharesv_webservice.domain.entity.Role;
 import org.carshare.carsharesv_webservice.domain.entity.User;
+import org.carshare.carsharesv_webservice.exception.DeactivatedException;
 import org.carshare.carsharesv_webservice.exception.ExistingUserException;
 import org.carshare.carsharesv_webservice.repository.iRoleRepository;
 import org.carshare.carsharesv_webservice.repository.iUserRepository;
@@ -84,8 +85,16 @@ public class AuthServiceImpl implements iAuthService {
         // Sets the authentication in Spring Security's context
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        String token = jwtProvider.generateToken(authentication);
+
         // Generates a JWT token for the authenticated user
-        return jwtProvider.generateToken(authentication);
+
+        User user = userRepository.findByUsernameOrEmail(loginRequestDTO.getUsername(), null).orElse(null);
+
+        if(user.getActive().equals(true)) {
+            return token;
+        }else throw new DeactivatedException("User is not activated");
+        
     }
 
     @Override

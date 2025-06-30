@@ -94,7 +94,7 @@ public class AuthServiceImpl implements iAuthService {
         if(user.getActive().equals(true)) {
             return token;
         }else throw new DeactivatedException("User is not activated");
-        
+
     }
 
     @Override
